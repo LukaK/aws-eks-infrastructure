@@ -1,0 +1,24 @@
+scan:
+  # Same as '--skip-dirs'
+  # Default is empty
+  skip-dirs:
+    - "**/.terragrunt-cache"
+    - "**/.terraform"
+    - "**/.git"
+
+  # Default depends on subcommand
+  scanners:
+    - misconfig
+    - vuln
+    - secret
+
+severity:
+  - HIGH
+  - CRITICAL
+
+exit-code: 1
+
+ignorefile: .config/trivyignore
+
+vulnerability:
+  ignore-unfixed: true

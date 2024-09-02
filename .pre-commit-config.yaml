@@ -1,0 +1,39 @@
+default_stages:
+  - pre-commit
+  - pre-push
+
+fail_fast: false
+
+repos:
+
+  - repo: https://github.com/gruntwork-io/pre-commit
+    rev: v0.1.23
+    hooks:
+      - id: terragrunt-hclfmt
+      - id: terraform-fmt
+      - id: terraform-validate
+      - id: tflint
+        args: ["--minimum-failure-severity=error"]
+
+  - repo: https://github.com/terraform-docs/terraform-docs
+    rev: "v0.18.0"
+    hooks:
+
+      - id: terraform-docs-go
+        name: terraform-docs-check
+        args: ["markdown", "-c", ".config/tfdocs-config.yaml", "--output-check", "./infrastructure"]
+
+      - id: terraform-docs-go
+        name: terraform-docs-generate
+        args: ["markdown", "-c", ".config/tfdocs-config.yaml", "./infrastructure"]
+
+  - repo: local
+    hooks:
+
+      - id: trivy-fs
+        stages:
+          - pre-push
+        name: trivy-fs
+        language: docker_image
+        entry: -v /tmp:/.cache aquasec/trivy:latest fs -c .config/trivy.yaml .
+        pass_filenames: false
