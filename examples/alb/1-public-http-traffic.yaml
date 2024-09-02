@@ -1,0 +1,58 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: public-http-deployment
+  namespace: alb-examples
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: public-http
+  template:
+    metadata:
+      labels:
+        app: public-http
+    spec:
+      containers:
+        - name: echoserver
+          image: ealen/echo-server
+          ports:
+            - containerPort: 80
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: alb-examples
+  name: public-http-service
+spec:
+  ports:
+    - port: 80
+      protocol: TCP
+  type: ClusterIP
+  selector:
+    app: public-http
+
+
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  namespace: alb-examples
+  name: public-http-ingress
+  annotations:
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/target-type: ip
+spec:
+  ingressClassName: alb
+  rules:
+    - http:
+        paths:
+        - path: /
+          pathType: Prefix
+          backend:
+            service:
+              name: public-http-service
+              port:
+                number: 80

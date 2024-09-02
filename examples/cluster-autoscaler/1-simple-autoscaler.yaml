@@ -1,0 +1,21 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: simple-autoscaler-deployment
+  namespace: cluster-autoscaller-examples
+spec:
+  replicas: 20
+  selector:
+    matchLabels:
+      app: simple-autoscaler
+  template:
+    metadata:
+      labels:
+        app: simple-autoscaler
+    spec:
+      containers:
+        - name: echoserver
+          image: ealen/echo-server
+          ports:
+            - containerPort: 80

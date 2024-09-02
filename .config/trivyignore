@@ -1,0 +1,8 @@
+# allow not using ksm for encryption
+AVD-AWS-0132
+
+# allow opening ports lower than 1024
+AVD-KSV-0117
+
+# allow non read only filesystem in container
+AVD-KSV-0014
