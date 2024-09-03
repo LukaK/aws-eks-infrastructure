@@ -1,0 +1,95 @@
+name: "CI pipeline"
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch: {}
+
+
+permissions:
+  contents: read
+
+
+jobs:
+
+  check-docs:
+    name: Check Module Documentation
+
+    runs-on: ubuntu-latest
+
+    steps:
+
+      # Checkout the base branch of the pull request (e.g. main/master).
+      - name: Checkout base branch
+        uses: actions/checkout@v4
+
+      - name: Render terraform docs inside the README.md and push changes back to PR branch
+        uses: terraform-docs/gh-actions@v1.2.0
+        with:
+          args: "--output-check"
+          working-dir: infrastructure/
+          output-method: inject
+          config-file: .config/tfdocs-config.yaml
+
+
+  scan-for-security-issues:
+
+    name: Security Scan
+
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Scan terraform files for misconfiguration
+        uses: aquasecurity/trivy-action@0.20.0
+        with:
+          scan-type: 'fs'
+          scan-ref: '.'
+          trivy-config: .config/trivy.yaml
+
+
+  validate-infrastructure:
+
+    name: Terragrunt Infrastructure Checks
+
+    runs-on: ubuntu-latest
+
+    env:
+      tf_version: '1.9.4'
+      tg_version: '0.58.10'
+      working_dir: 'infrastructure/live'
+
+    steps:
+
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Terragrunt Check Hcl Format
+        uses: gruntwork-io/terragrunt-action@v2
+        with:
+          tg_dir: ${{ env.working_dir }}
+          tf_version: ${{ env.tf_version }}
+          tg_version: ${{ env.tg_version }}
+          tg_command: 'hclfmt --terragrunt-check --terragrunt-diff'
+
+
+      - name: Terragrunt Init
+        uses: gruntwork-io/terragrunt-action@v2
+        with:
+          tg_dir: ${{ env.working_dir }}
+          tf_version: ${{ env.tf_version }}
+          tg_version: ${{ env.tg_version }}
+          tg_command: 'run-all init'
+
+      - name: Terragrunt Validate
+        uses: gruntwork-io/terragrunt-action@v2
+        id: terragrunt-validate
+        with:
+          tg_dir: ${{ env.working_dir }}
+          tf_version: ${{ env.tf_version }}
+          tg_version: ${{ env.tg_version }}
+          tg_command: 'run-all validate'
