@@ -107,6 +107,7 @@ jobs:
     needs:
       - scan-for-security-issues
       - validate-infrastructure
+      - check-docs
 
     if: github.ref == 'refs/heads/main'
 
@@ -119,7 +120,8 @@ jobs:
         uses: aquasecurity/trivy-action@0.20.0
         with:
           scan-type: 'fs'
+          trivy-config: .config/trivy.yaml
+          image-ref: '.'
           format: 'github'
           output: 'dependency-results.sbom.json'
-          image-ref: '.'
           github-pat: ${{ secrets.GITHUB_TOKEN }}
