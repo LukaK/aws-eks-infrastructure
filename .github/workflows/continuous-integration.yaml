@@ -93,35 +93,3 @@ jobs:
           tf_version: ${{ env.tf_version }}
           tg_version: ${{ env.tg_version }}
           tg_command: 'run-all validate'
-
-
-  publish-sbom:
-
-    name: Publish SBOM
-
-    permissions:
-      contents: write
-
-    runs-on: ubuntu-latest
-
-    needs:
-      - scan-for-security-issues
-      - validate-infrastructure
-      - check-docs
-
-    if: github.ref == 'refs/heads/main'
-
-    steps:
-
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Build SBOM in github format and push it to github dependency graph
-        uses: aquasecurity/trivy-action@0.20.0
-        with:
-          scan-type: 'fs'
-          trivy-config: .config/trivy.yaml
-          image-ref: '.'
-          format: 'github'
-          output: 'dependency-results.sbom.json'
-          github-pat: ${{ secrets.GITHUB_TOKEN }}
