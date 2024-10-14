@@ -38,11 +38,12 @@ inputs = {
   cluster_name    = local.configuration.cluster_name
   cluster_version = local.configuration.cluster_version
 
-  # add public access
-  cluster_endpoint_public_access = true
+  # public & private access
+  cluster_endpoint_public_access  = true
+  cluster_endpoint_private_access = true
 
-  # create oidc provider for the cluster
-  enable_irsa = true
+  # don't create oidc provider for the cluster, use pod identities
+  enable_irsa = false
 
   # network information with subnets where nodes will be created
   vpc_id     = dependency.vpc.outputs.vpc_id
