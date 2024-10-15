@@ -61,6 +61,12 @@ Ebs backed persistent volumes support only `ReadWriteOnce` mode and are tied to 
 
 Examples can be found [here](./examples/ebs-csi/)
 
+To get available version of the controller use command below.
+
+```bash
+aws eks describe-addon-versions --region REGION --addon-name aws-ebs-csi-driver
+```
+
 
 ### Efs Controller
 
