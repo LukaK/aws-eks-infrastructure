@@ -135,6 +135,26 @@ Use the following command.
 aws eks update-kubeconfig --name CLUSTER-NAME --region REGION --profile PROFILE
 ```
 
+## Horizontal Pod Autoscaler
+
+Prepare shells for monitoring.
+
+```bash
+# shell 1: watch number of pods
+kubectl get deployment -n hpa-example --watch
+
+# shell 2; watch horizontal pod autoscaler metrics
+kubectl get hpa -n hpa-example --watch
+```
+
+To trigger the auto scaling event execute the following command.
+
+```bash
+kubectl run -i --tty load-generator --rm --image=busybox:1.28 --restart=Never -- /bin/sh -c "while sleep 0.01; do wget -q -O- http://myapp.hpa-example.svc.cluster.local; done"
+```
+
+After the load reduces pods will scale down in 5-10 minutes.
+
 
 ## Cleanup
 ```bash
