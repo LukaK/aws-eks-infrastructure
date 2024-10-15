@@ -155,6 +155,16 @@ kubectl run -i --tty load-generator --rm --image=busybox:1.28 --restart=Never --
 
 After the load reduces pods will scale down in 5-10 minutes.
 
+## Pod Identity
+
+Find out pod identity add-on version with
+
+```bash
+aws eks describe-addon-versions --region REGION --addon-name eks-pod-identity-agent
+```
+
+To upgrade the version just update it in terraform module.
+
 
 ## Cleanup
 ```bash

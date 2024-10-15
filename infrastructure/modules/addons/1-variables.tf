@@ -2,3 +2,22 @@ variable "cluster_name" {
   type        = string
   description = "Eks cluster name"
 }
+
+variable "region" {
+  type        = string
+  description = "Aws region"
+  default     = "eu-west-1"
+}
+
+
+variable "pod_identity_version" {
+  type        = string
+  description = "Version of the pod identity agent"
+  default     = "v1.3.2-eksbuild.2"
+}
+
+variable "cluster_autoscaler_chart_version" {
+  type        = string
+  description = "Helm chart version of cluster autoscaler"
+  default     = "9.37.0"
+}

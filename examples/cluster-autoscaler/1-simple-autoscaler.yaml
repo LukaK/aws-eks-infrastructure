@@ -5,7 +5,7 @@ metadata:
   name: simple-autoscaler-deployment
   namespace: cluster-autoscaller-examples
 spec:
-  replicas: 20
+  replicas: 50
   selector:
     matchLabels:
       app: simple-autoscaler
