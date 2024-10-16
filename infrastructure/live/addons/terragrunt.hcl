@@ -28,31 +28,14 @@ dependency "eks" {
   config_path = "../eks/"
 
   mock_outputs = {
-    cluster_name                      = "demo"
-    cluster_primary_security_group_id = "sg-1234"
-    node_security_group_id            = "sg-1234"
+    cluster_name = "demo"
   }
 }
 
-dependency "vpc" {
-  config_path = "../vpc/"
-
-  mock_outputs = {
-    private_subnets = ["subnet-1234", "subnet-5678"]
-  }
-}
 
 inputs = {
   cluster_name = dependency.eks.outputs.cluster_name
   tags         = local.tags
-
-  # efs storage configuration
-  efs_storage_configuration = {
-    storage_class_name                  = "efs"
-    storage_class_directory_permissions = "700"
-    subnet_ids                          = dependency.vpc.outputs.private_subnets
-    security_group_ids                  = [dependency.eks.outputs.cluster_primary_security_group_id, dependency.eks.outputs.node_security_group_id]
-  }
 }
 
 
@@ -75,12 +58,6 @@ provider "helm" {
     cluster_ca_certificate = base64decode(data.aws_eks_cluster.eks.certificate_authority[0].data)
     token = data.aws_eks_cluster_auth.eks.token
   }
-}
-
-provider kubernetes {
-  host = data.aws_eks_cluster.eks.endpoint
-  cluster_ca_certificate = base64decode(data.aws_eks_cluster.eks.certificate_authority[0].data)
-  token = data.aws_eks_cluster_auth.eks.token
 }
 EOF
 }
