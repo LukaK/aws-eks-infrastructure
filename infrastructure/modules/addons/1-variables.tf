@@ -25,18 +25,13 @@ variable "ebs_csi_driver_version" {
 
 variable "cluster_autoscaler_chart_version" {
   type        = string
-  description = "Helm chart version of cluster autoscaler"
+  description = "Helm chart version for cluster autoscaler"
   default     = "9.37.0"
 }
 
-variable "efs_storage_configuration" {
-  description = "Efs storage configuration"
-  type = object({
-    subnet_ids                          = list(string)
-    security_group_ids                  = list(string)
-    storage_class_name                  = string
-    storage_class_directory_permissions = string
-  })
+
+variable "efs_csi_chart_version" {
+  type        = string
+  description = "Helm chart version for efs csi driver"
+  default     = "3.0.8"
 }
-
-
