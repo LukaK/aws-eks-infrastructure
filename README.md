@@ -90,6 +90,8 @@ To keep number of application load balancers down, define ingress groups. Every 
 
 Examples can be found [here](./examples/alb/)
 
+Annotations can be found [here](https://kubernetes-sigs.github.io/aws-load-balancer-controller/v2.7/guide/service/annotations/).
+
 ### Cluster Autoscaler
 
 Responsible for adjusting worker node count based on the cluster load.
