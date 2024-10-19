@@ -47,7 +47,8 @@ metadata:
 spec:
   ingressClassName: alb
   rules:
-    - http:
+    - host: test.lukak.com
+      http:
         paths:
         - path: /
           pathType: Prefix
