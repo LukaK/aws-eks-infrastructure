@@ -24,12 +24,11 @@ jobs:
       - name: Checkout base branch
         uses: actions/checkout@v4
 
-      - name: Render terraform docs inside the README.md and push changes back to PR branch
+      - name: Check if terraform docs are up to date
         uses: terraform-docs/gh-actions@v1.2.0
         with:
           args: "--output-check"
           working-dir: infrastructure/
-          output-method: inject
           config-file: .config/tfdocs-config.yaml
 
 
