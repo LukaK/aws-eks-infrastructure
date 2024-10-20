@@ -44,4 +44,6 @@ resource "helm_release" "efs_csi_driver" {
     name  = "controller.serviceAccount.name"
     value = "efs-csi-controller-sa"
   }
+
+  depends_on = [helm_release.cluster_autoscaler]
 }

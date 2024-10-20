@@ -4,7 +4,7 @@ resource "helm_release" "metric_server" {
   repository = "https://kubernetes-sigs.github.io/metrics-server/"
   chart      = "metrics-server"
   namespace  = "kube-system"
-  version    = "3.12.1"
+  version    = var.metric_server_chart_version
 
   values = [file("${path.module}/values/metrics-server.yaml")]
 }

@@ -87,5 +87,5 @@ resource "helm_release" "cluster_autoscaler" {
     value = var.region
   }
 
-  depends_on = [aws_eks_pod_identity_association.cluster_autoscaler, aws_iam_role_policy_attachment.cluster_autoscaler]
+  depends_on = [helm_release.metric_server]
 }
