@@ -2,7 +2,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: storage-classes
+  name: users-iam
   namespace: argocd
 
   # remove resources when deleting application
