@@ -11,7 +11,7 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://github.com/LukaK/test-argocd.git
+    repoURL: https://github.com/LukaK/aws-eks-infrastructure.git
     targetRevision: HEAD
     path: services/environments/global/storage-classes
   destination:
