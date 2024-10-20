@@ -2,7 +2,7 @@
 
 Deploy examples with `kubectl apply -f .`.
 Wait a couple of minutes for load balancer to get in the `Active` state looking in the aws console.
-All examples are deployed in `alb-examples` namespace.
+All examples are deployed in `lbc-examples` namespace.
 
 ## Network load balancer
 
@@ -14,7 +14,7 @@ Use `pi` target type where target group for load balancer is the pod ip address.
 Wait for the load balancer to be deployed and in ready state.
 
 ```bash
-kubectl get vsc -n alb-examples
+kubectl get vsc -n lbc-examples
 ```
 
 Test if the dns is resolving ok.

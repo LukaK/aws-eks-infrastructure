@@ -16,7 +16,7 @@ Directory structure is shown below.
 ├── assets                  # documentation assets
 |
 ├── examples                # EXAMPLES
-│   ├── alb                 # load balancer example
+│   ├── lbc                 # load balancer example
 │   ├── cluster-autoscaler  # cluster autoscaler example
 │   ├── ebs-csi             # ebs storage example
 │   ├── efs                 # efs storage example
@@ -272,7 +272,7 @@ When ingress object is defined, controller will provision application load balan
 To keep number of application load balancers down, define ingress groups.
 Every ingress group maps to one application load balancer.
 
-Examples on load balancer controller can be found [here](./examples/alb/)
+Examples on load balancer controller can be found [here](./examples/lbc/)
 
 Annotations used with network load balancer can be found [here](https://kubernetes-sigs.github.io/aws-load-balancer-controller/v2.7/guide/service/annotations/).
 
