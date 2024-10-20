@@ -14,13 +14,15 @@ Directory structure is shown below.
 ```bash
 ├── README.md
 ├── assets                  # documentation assets
-├── examples                # examples directory
-│   ├── alb
-│   ├── cluster-autoscaler
-│   ├── ebs-csi
-│   ├── efs
-│   └── hpa
-├── infrastructure          # infrastructure
+|
+├── examples                # EXAMPLES
+│   ├── alb                 # load balancer example
+│   ├── cluster-autoscaler  # cluster autoscaler example
+│   ├── ebs-csi             # ebs storage example
+│   ├── efs                 # efs storage example
+│   └── hpa                 # horizontal pod autoscaler example
+|
+├── infrastructure          # INFRASTRUCTURE
 │   ├── live
 │   │   ├── addons          # eks add-ons stack
 │   │   ├── devenv.hcl      # dev environment specific overrides
@@ -30,10 +32,12 @@ Directory structure is shown below.
 │   │   ├── terragrunt.hcl  # root terragrunt configuration
 │   │   ├── user-access     # cluster user access stack ( admins, viewers )
 │   │   └── vpc             # networking stack
-│   └── modules
+|   |
+│   └── modules             # TERRAFORM MODULES
 │       ├── addons          # eks add-ons instalation
 │       ├── storage         # efs resources
 │       └── users-iam       # resources for user access management
+|
 └── services                # additional cluster resources deployed with manifests
     ├── storage-classes
     └── users-iam
@@ -65,7 +69,7 @@ aws eks update-kubeconfig --name demo --region eu-west-1
 
 Deploy additional resources to the cluster.
 ```bash
-pushd services/storage-classes && kubectl
+kubectl apply --recursive -f services/
 ```
 
 ## Network Stack
@@ -100,7 +104,50 @@ For more details about the cluster configuration see `infrastructure/live/env.hc
 
 ## Storage Stack
 
+Contains resources defined in `storage` terraform module.
+
+It deploys efs file system and mount targets in private subnets so that worker nodes can mount the file system with efs csi driver.
+It also contains kubernetes storage class resource.
+
+
 ## User Access Stack
+
+Contains resources is `users-iam` module and contains resources for granting permissions to users.
+
+For admin users it create admin iam role and links it to admin cluster group using eks api.
+Admin iam group is created as well with permissions to assume the admin role, to easily add new users.
+
+For viewers it creates viewer iam role and binds it to the viewer group using eks api.
+Viewer iam group is created as well with permission to assume the viewer role, to easily add new users.
+
+In eks, permissions for admin and viewer group is granted with cluster role and cluster role binding.
+They are defined in `services/users-iam` and are not deployed with the terraform resources.
+
+### How to grant admin/viewer permissions
+
+1. Create the user with command line access
+2. Assign the user to the `admin/viewer` iam group
+3. Send corresponding role arn to the user
+4. User assumes the role and updates its local `.kube/config` file
+
+### How to assume the role and update local kube config file
+
+Validate if you can assume the target role.
+```bash
+aws sts assume-role --role-arn ROLE-ARN --role-session-name SOME-NAME --profile BASE-PROFILE
+```
+
+Create new profile manually in `.aws/config` from your base user credentials.
+```text
+[profile PROFILE-NAME]
+source_profile = BASE-PROFILE
+role_arn = ROLE-ARN
+```
+
+Update local kube config file.
+```bash
+aws eks update-kubeconfig --name demo --region eu-west-1 --profile PROFILE-NAME
+```
 
 ## Cluster Add-ons Stack
 
@@ -134,8 +181,7 @@ aws eks describe-addon-versions --region eu-west-1 --addon-name eks-pod-identity
 Metric server is a controller that is used to determine cpu and memory utilization by nodes and pods.
 It is used by pod autoscaler for scaling pods horizontally or vertically.
 
-For more advanced scaling use cases based on latency substitute metric server for prometheus.
-Also for scaling based on the event queue see LINK.
+For more advanced scaling use cases based on latency, traffic, saturation or errors substitute metric server for prometheus or keda.
 
 Metric server is installed with helm and the latest version at the time of writing.
 To upgrade the version of metric server use the command below to find out the new version and update the corresponding module parametar.
@@ -150,12 +196,6 @@ To see default chart values use the command below.
 ```bash
 helm show-values metric-server/metric-server --version VERSION
 ```
-
-TODO:
-- Check for what is the metric server requirement
-- check more useful metrics
-- check how to scale on queue events
-
 
 ### Cluster Autoscaler
 
@@ -180,9 +220,6 @@ To see default chart values use the command below.
 ```bash
 helm show-values autoscaler/cluster-autoscaler --version VERSION
 ```
-Todo:
-- check if the metric server is the requirement
-
 
 ### Ebs Csi Driver
 
@@ -255,90 +292,21 @@ To see default chart values use the command below.
 ```bash
 helm show-values eks-charts/aws-load-balancer-controller --version VERSION
 ```
-
-## User Access
-
-TODO: Add image
-
-After cluster is installed and configured, additional resources are added for admin and viewer user access.
-
-Two user groups are added `admins` and `viewers`.
-Admins have permission to assume admin eks role.
-Admin eks role has admin access to eks cluster and is linked to admin group in kubernetes cluster using EKS API.
-Viewers have analogous resources but with limited permissions.
-
-Kubernetes resources are in `services/users-iam`.
-They are deployed automatically with ArgoCD ( TODO ).
-
-
-
-
 ## Examples
 
-Deploy examples one by one or all at once.
-Every example has a `README.md` file with instructions.
+Deploy the examples.
 ```bash
-kubectl apply -f examples/
+kubectl apply --recursive -f examples/
 ```
-
-## Add-ons
-
-
-### How to grant admin/viewer permissions
-
-1. Create the user and create cli credentials
-2. Assign the user to the `admin` group for the eks cluster
-3. Send corresponding role arn to the user
-4. User updates its local kube config file with the assumed role
-
-### How to assume the role
-
-Validate if the user can assume the target role with following command.
-```bash
-aws sts assume-role --role-arn ROLE-ARN --role-session-name some-name --profile BASE-PROFILE
-```
-
-After validating, create profile manually in `.aws/config` like below.
-You will assume temporary credentials from the role using base profile to retrieve them.
-```text
-[profile test-eks-user-viewer]
-role_arn = ROLE-ARN
-source_profile = BASE-PROFILE
-```
-
-### How to update local kube config file
-
-Use the following command.
-```bash
-aws eks update-kubeconfig --name CLUSTER-NAME --region REGION --profile PROFILE
-```
-
-## Horizontal Pod Autoscaler
-
-Prepare shells for monitoring.
-
-```bash
-# shell 1: watch number of pods
-kubectl get deployment -n hpa-example --watch
-
-# shell 2; watch horizontal pod autoscaler metrics
-kubectl get hpa -n hpa-example --watch
-```
-
-To trigger the auto scaling event execute the following command.
-
-```bash
-kubectl run -i --tty load-generator --rm --image=busybox:1.28 --restart=Never -- /bin/sh -c "while sleep 0.01; do wget -q -O- http://myapp.hpa-example.svc.cluster.local; done"
-```
-
-After the load reduces pods will scale down in 5-10 minutes.
-
 ## Cleanup
 ```bash
-# cleanup examples
+# delete examples
 kubectl delete --recursive -f examples/
 
-# cleanup aws resources
+# delete services
+kubectl delete --recursive -f services/
+
+# delete infrastructure
 pushd ./infrastructure/live
 terragrunt run-all destroy
 popd
