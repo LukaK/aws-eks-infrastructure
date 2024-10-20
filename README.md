@@ -69,7 +69,7 @@ aws eks update-kubeconfig --name demo --region eu-west-1
 
 Deploy additional resources to the cluster.
 ```bash
-kubectl apply --recursive -f services/
+kubectl apply -f argocd-apps
 ```
 
 ## Network Stack
@@ -297,7 +297,7 @@ helm show-values eks-charts/aws-load-balancer-controller --version VERSION
 
 ArgoCD is continuous deployment tool for kubernetes platform that ensures that the state of the cluster is aligned with the git repository.
 
-To start, retrieve the initial admin password.
+To login to the portal, start by retrieve the initial admin password.
 ```bash
 kubectl get secret -n argocd argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d
 ```
@@ -337,7 +337,7 @@ kubectl apply --recursive -f examples/
 kubectl delete --recursive -f examples/
 
 # delete services
-kubectl delete --recursive -f services/
+kubectl delete -f argocd-apps
 
 # delete infrastructure
 pushd ./infrastructure/live

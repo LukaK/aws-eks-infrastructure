@@ -1,21 +1,5 @@
 ---
 apiVersion: argoproj.io/v1alpha1
-kind: AppProject
-metadata:
-  name: services
-  namespace: argocd
-spec:
-  sourceRepos:
-  - '*'
-  destinations:
-  - namespace: '*'
-    server: '*'
-  clusterResourceWhitelist:
-  - group: '*'
-    kind: '*'
-
----
-apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
   name: services
@@ -28,7 +12,7 @@ spec:
   project: default
   source:
     repoURL: https://github.com/LukaK/aws-eks-infrastructure.git
-    targetRevision: argocd
+    targetRevision: main
     path: services/apps
   destination:
     server: https://kubernetes.default.svc
