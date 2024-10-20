@@ -10,3 +10,7 @@ output:
 
 settings:
   lockfile: false
+
+sections:
+  hide:
+    - providers

@@ -7,13 +7,6 @@
 | <a name="requirement_aws"></a> [aws](#requirement\_aws) | ~> 5.63 |
 | <a name="requirement_kubernetes"></a> [kubernetes](#requirement\_kubernetes) | ~> 2.32 |
 
-## Providers
-
-| Name | Version |
-|------|---------|
-| <a name="provider_aws"></a> [aws](#provider\_aws) | ~> 5.63 |
-| <a name="provider_kubernetes"></a> [kubernetes](#provider\_kubernetes) | ~> 2.32 |
-
 ## Modules
 
 No modules.
