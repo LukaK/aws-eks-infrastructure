@@ -12,6 +12,9 @@ Extra terraform resources for cluster workings are in `services` directory and e
 Directory structure is shown below.
 
 ```bash
+
+
+
 ├── README.md
 ├── assets                  # documentation assets
 |
