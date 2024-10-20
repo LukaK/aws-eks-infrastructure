@@ -13,7 +13,7 @@ spec:
   source:
     repoURL: https://github.com/LukaK/aws-eks-infrastructure.git
     targetRevision: main
-    path: services/environments/global/storage-classes
+    path: services/global/storage-classes
   destination:
     server: https://kubernetes.default.svc
   syncPolicy:
