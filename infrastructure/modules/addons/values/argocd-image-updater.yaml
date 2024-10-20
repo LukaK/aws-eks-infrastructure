@@ -1,0 +1,3 @@
+---
+serviceAccount:
+  name: argocd-image-updater

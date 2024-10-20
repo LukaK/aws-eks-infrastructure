@@ -33,6 +33,7 @@ No modules.
 | [aws_iam_role_policy_attachment.ebs_csi_driver](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy_attachment) | resource |
 | [aws_iam_role_policy_attachment.ebs_csi_driver_encryption](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy_attachment) | resource |
 | [aws_iam_role_policy_attachment.efs_csi_driver](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy_attachment) | resource |
+| [helm_release.argocd](https://registry.terraform.io/providers/hashicorp/helm/2.16.0/docs/resources/release) | resource |
 | [helm_release.aws_lbc](https://registry.terraform.io/providers/hashicorp/helm/2.16.0/docs/resources/release) | resource |
 | [helm_release.cluster_autoscaler](https://registry.terraform.io/providers/hashicorp/helm/2.16.0/docs/resources/release) | resource |
 | [helm_release.efs_csi_driver](https://registry.terraform.io/providers/hashicorp/helm/2.16.0/docs/resources/release) | resource |
@@ -42,6 +43,7 @@ No modules.
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
+| <a name="input_argocd_chart_version"></a> [argocd\_chart\_version](#input\_argocd\_chart\_version) | Helm chart version for argocd | `string` | `"7.6.12"` | no |
 | <a name="input_aws_lbc_chart_version"></a> [aws\_lbc\_chart\_version](#input\_aws\_lbc\_chart\_version) | Helm chart version for aws load balancer controller | `string` | `"1.9.1"` | no |
 | <a name="input_cluster_autoscaler_chart_version"></a> [cluster\_autoscaler\_chart\_version](#input\_cluster\_autoscaler\_chart\_version) | Helm chart version for cluster autoscaler | `string` | `"9.37.0"` | no |
 | <a name="input_cluster_name"></a> [cluster\_name](#input\_cluster\_name) | Eks cluster name | `string` | n/a | yes |

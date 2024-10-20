@@ -189,7 +189,7 @@ To upgrade the version of metric server use the command below to find out the ne
 ```bash
 helm repo add metric-server https://kubernetes-sigs.github.io/metrics-server/
 helm repo update
-helm search repo metric-server metric-server
+helm search repo metric-server/metric-server
 ```
 
 To see default chart values use the command below.
@@ -213,7 +213,7 @@ To upgrade the version use the command below to find out the new version and upd
 ```bash
 helm repo add autoscaler https://kubernetes.github.io/autoscaler
 helm repo update
-helm search repo autoscaler cluster-autoscaler
+helm search repo autoscaler/cluster-autoscaler
 ```
 
 To see default chart values use the command below.
@@ -253,7 +253,7 @@ To upgrade the version use the command below to find out the new version and upd
 ```bash
 helm repo add efs-csi https://kubernetes-sigs.github.io/aws-efs-csi-driver/
 helm repo update
-helm search repo efs-csi aws-efs-csi-driver
+helm search repo efs-csi/aws-efs-csi-driver
 ```
 
 To see default chart values use the command below.
@@ -285,13 +285,32 @@ To upgrade the version use the command below to find out the new version and upd
 ```bash
 helm repo add eks-charts https://aws.github.io/eks-charts
 helm repo update
-helm search repo eks-charts aws-load-balancer-controller
+helm search repo eks-charts/aws-load-balancer-controller
 ```
 
 To see default chart values use the command below.
 ```bash
 helm show-values eks-charts/aws-load-balancer-controller --version VERSION
 ```
+
+### ArgoCD
+
+ArgoCD is continuous deployment tool for kubernetes platform.
+
+ArgoCD is installed with helm and the latest version at the time of writing.
+To upgrade the version use the command below to find out the new version and update the corresponding module parametar.
+
+```bash
+helm repo add argo https://argoproj.github.io/argo-helm
+helm repo update
+helm search repo argo/argo-cd
+```
+
+To see default chart values use the command below.
+```bash
+helm show-values eks-charts/aws-load-balancer-controller --version VERSION
+```
+
 ## Examples
 
 Deploy the examples.
