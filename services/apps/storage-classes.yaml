@@ -12,7 +12,7 @@ spec:
   project: default
   source:
     repoURL: https://github.com/LukaK/aws-eks-infrastructure.git
-    targetRevision: HEAD
+    targetRevision: argocd
     path: services/environments/global/storage-classes
   destination:
     server: https://kubernetes.default.svc
