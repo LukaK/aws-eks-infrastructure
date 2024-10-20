@@ -12,38 +12,32 @@ Extra terraform resources for cluster workings are in `services` directory and e
 Directory structure is shown below.
 
 ```bash
-
-
-
 ├── README.md
-├── assets                  # documentation assets
-|
-├── examples                # EXAMPLES
-│   ├── lbc                 # load balancer example
-│   ├── cluster-autoscaler  # cluster autoscaler example
-│   ├── ebs-csi             # ebs storage example
-│   ├── efs                 # efs storage example
-│   └── hpa                 # horizontal pod autoscaler example
-|
-├── infrastructure          # INFRASTRUCTURE
+├── argocd-apps                     # ArgoCD root applications
+├── assets                          # documentation assets
+├── examples                        # EXAMPLES
+├── infrastructure                  # INFRASTRUCTURE ( TERRAGRUNT )
 │   ├── live
-│   │   ├── addons          # eks add-ons stack
-│   │   ├── devenv.hcl      # dev environment specific overrides
-│   │   ├── eks             # eks stack
-│   │   ├── env.hcl         # default environment configuration
-│   │   ├── storage         # storage stack
-│   │   ├── terragrunt.hcl  # root terragrunt configuration
-│   │   ├── user-access     # cluster user access stack ( admins, viewers )
-│   │   └── vpc             # networking stack
-|   |
-│   └── modules             # TERRAFORM MODULES
-│       ├── addons          # eks add-ons instalation
-│       ├── storage         # efs resources
-│       └── users-iam       # resources for user access management
-|
-└── services                # additional cluster resources deployed with manifests
-    ├── storage-classes
-    └── users-iam
+│   │   ├── addons                  # eks add-on stack
+│   │   ├── devenv.hcl              # dev env overrides
+│   │   ├── eks                     # eks stack
+│   │   ├── env.hcl                 # default environment configuration
+│   │   ├── storage                 # storage stack
+│   │   ├── terragrunt.hcl          # terragrunt root configuration
+│   │   ├── user-access             # user access stack
+│   │   └── vpc                     # network stack
+│   └── modules                     # TERRAFORM MODULES
+│       ├── addons
+│       ├── storage
+│       └── users-iam
+└── services
+    ├── apps                        # ArgoCD applications for services
+    ├── base                        # Kustomize base files
+    │   ├── storage-classes
+    │   └── users-iam
+    └── global                      # Kustomize base classes
+        ├── storage-classes
+        └── users-iam
 ```
 
 ## Deployment
