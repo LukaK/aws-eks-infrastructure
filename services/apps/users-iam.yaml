@@ -9,7 +9,7 @@ metadata:
   finalizers:
     - resources-finalizer.argocd.argoproj.io
 spec:
-  project: default
+  project: services
   source:
     repoURL: https://github.com/LukaK/aws-eks-infrastructure.git
     targetRevision: argocd
