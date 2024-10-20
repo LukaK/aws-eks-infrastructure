@@ -11,8 +11,8 @@
 
 | Name | Version |
 |------|---------|
-| <a name="provider_aws"></a> [aws](#provider\_aws) | 5.72.1 |
-| <a name="provider_kubernetes"></a> [kubernetes](#provider\_kubernetes) | 2.33.0 |
+| <a name="provider_aws"></a> [aws](#provider\_aws) | ~> 5.63 |
+| <a name="provider_kubernetes"></a> [kubernetes](#provider\_kubernetes) | ~> 2.32 |
 
 ## Modules
 
@@ -31,7 +31,7 @@ No modules.
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
 | <a name="input_cluster_name"></a> [cluster\_name](#input\_cluster\_name) | Eks cluster name | `string` | n/a | yes |
-| <a name="input_efs_storage_configuration"></a> [efs\_storage\_configuration](#input\_efs\_storage\_configuration) | Efs storage configuration | <pre>object({<br>    subnet_ids                          = list(string)<br>    security_group_ids                  = list(string)<br>    storage_class_name                  = string<br>    storage_class_directory_permissions = string<br>  })</pre> | n/a | yes |
+| <a name="input_efs_storage_configuration"></a> [efs\_storage\_configuration](#input\_efs\_storage\_configuration) | Efs storage configuration | <pre>object({<br/>    subnet_ids                          = list(string)<br/>    security_group_ids                  = list(string)<br/>    storage_class_name                  = string<br/>    storage_class_directory_permissions = string<br/>  })</pre> | n/a | yes |
 | <a name="input_tags"></a> [tags](#input\_tags) | n/a | `map(string)` | `{}` | no |
 
 ## Outputs
