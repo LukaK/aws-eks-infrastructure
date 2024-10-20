@@ -9,10 +9,10 @@ metadata:
   finalizers:
     - resources-finalizer.argocd.argoproj.io
 spec:
-  project: services
+  project: default
   source:
     repoURL: https://github.com/LukaK/aws-eks-infrastructure.git
-    targetRevision: argocd
+    targetRevision: main
     path: services/environments/global/users-iam
   destination:
     server: https://kubernetes.default.svc
