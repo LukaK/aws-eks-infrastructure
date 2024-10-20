@@ -23,6 +23,13 @@ variable "ebs_csi_driver_version" {
   default     = "v1.35.0-eksbuild.1"
 }
 
+
+variable "metric_server_chart_version" {
+  type        = string
+  description = "Helm chart version for metric server"
+  default     = "3.12.1"
+}
+
 variable "cluster_autoscaler_chart_version" {
   type        = string
   description = "Helm chart version for cluster autoscaler"
