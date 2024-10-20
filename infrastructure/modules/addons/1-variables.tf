@@ -49,3 +49,10 @@ variable "aws_lbc_chart_version" {
   description = "Helm chart version for aws load balancer controller"
   default     = "1.9.1"
 }
+
+
+variable "argocd_chart_version" {
+  type        = string
+  description = "Helm chart version for argocd"
+  default     = "7.6.12"
+}
