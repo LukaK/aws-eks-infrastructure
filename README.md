@@ -69,6 +69,21 @@ Deploy additional resources to the cluster.
 kubectl apply -f argocd-apps
 ```
 
+To login to the ArgoCD portal, start by retrieve the initial admin password.
+```bash
+kubectl get secret -n argocd argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d
+```
+
+Port forward to the ArgoCD instalation.
+```bash
+# second shell
+kubectl port-forward -n argocd svc/argocd-server 8080:80
+```
+
+Login to `localhost:8080` with username `admin` and password from previous step.
+
+
+
 ## Network Stack
 
 Network is configured with two public subnets and two private subnets.
@@ -158,6 +173,7 @@ List of add-ons:
 - ebs csi driver
 - efs csi controller
 - load balancer controller
+- ArgoCD
 
 ### Pod identity
 
@@ -294,20 +310,6 @@ helm show-values eks-charts/aws-load-balancer-controller --version VERSION
 
 ArgoCD is continuous deployment tool for kubernetes platform that ensures that the state of the cluster is aligned with the git repository.
 
-To login to the portal, start by retrieve the initial admin password.
-```bash
-kubectl get secret -n argocd argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d
-```
-
-Port forward to the ArgoCD instalation.
-```bash
-# second shell
-kubectl port-forward -n argocd svc/argocd-server 8080:80
-```
-
-Login to `localhost:8080` with username `admin` and password from previous step.
-
-
 ArgoCD is installed with helm and the latest version at the time of writing.
 To upgrade the version use the command below to find out the new version and update the corresponding module parametar.
 
@@ -319,7 +321,7 @@ helm search repo argo/argo-cd
 
 To see default chart values use the command below.
 ```bash
-helm show-values eks-charts/aws-load-balancer-controller --version VERSION
+helm show-values argo/argo-cd --version VERSION
 ```
 
 ## Examples
