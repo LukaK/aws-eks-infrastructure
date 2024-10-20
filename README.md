@@ -295,7 +295,21 @@ helm show-values eks-charts/aws-load-balancer-controller --version VERSION
 
 ### ArgoCD
 
-ArgoCD is continuous deployment tool for kubernetes platform.
+ArgoCD is continuous deployment tool for kubernetes platform that ensures that the state of the cluster is aligned with the git repository.
+
+To start, retrieve the initial admin password.
+```bash
+kubectl get secret -n argocd argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d
+```
+
+Port forward to the ArgoCD instalation.
+```bash
+# second shell
+kubectl port-forward -n argocd svc/argocd-server 8080:80
+```
+
+Login to `localhost:8080` with username `admin` and password from previous step.
+
 
 ArgoCD is installed with helm and the latest version at the time of writing.
 To upgrade the version use the command below to find out the new version and update the corresponding module parametar.

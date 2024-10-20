@@ -1,0 +1,27 @@
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: storage-classes
+  namespace: argocd
+
+  # remove resources when deleting application
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/LukaK/test-argocd.git
+    targetRevision: HEAD
+    path: services/environments/global/storage-classes
+  destination:
+    server: https://kubernetes.default.svc
+  syncPolicy:
+    automated:
+      prune: true     # delete resources
+      selfHeal: true  # drift override
+    syncOptions:
+      - Validate=true          # validate deployment fields
+      - CreateNamespace=false  # don't create namespaces automatically
+      - PrunePropagationPolicy=foreground
+      - PruneLast=true

@@ -1,0 +1,7 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - 0-viewer-cluster-role.yaml
+  - 1-viewer-cluster-role-binding.yaml
+  - 2-admin-cluster-role-binding.yaml
