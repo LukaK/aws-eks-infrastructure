@@ -6,3 +6,6 @@ AVD-KSV-0117
 
 # allow non read only filesystem in container
 AVD-KSV-0014
+
+# allow wildcards in policies
+AVD-AWS-0057
