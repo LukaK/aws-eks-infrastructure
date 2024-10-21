@@ -1,7 +1,7 @@
 # Eks with Terraform and Terragrunt
 
 Project holds resources for deploying production ready aws eks cluster with plugins.
-Project is deployed as a terraform project with terragrunt to orchestrate the deployment.
+Project is deployed as a terraform project with terragrunt to orchestrate the deployment and ArgoCD to deploy extra resources and examples.
 
 Project is deployed in four stack; networking, eks cluster, eks add-ons and storage.
 All the files for terragrunt deployment are in `infrastructure/live` folder.
