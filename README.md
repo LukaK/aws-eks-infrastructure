@@ -14,27 +14,33 @@ Directory structure is shown below.
 ```bash
 ├── README.md
 ├── argocd-apps                     # ArgoCD root applications
-├── assets                          # documentation assets
+├── assets                          # Documentation assets
 ├── examples                        # EXAMPLES
+│   ├── apps                        # ArgoCD applications
+│   ├── cluster-autoscaler
+│   ├── ebs-csi
+│   ├── efs
+│   ├── hpa
+│   └── lbc
 ├── infrastructure                  # INFRASTRUCTURE ( TERRAGRUNT )
 │   ├── live
-│   │   ├── addons                  # eks add-on stack
-│   │   ├── devenv.hcl              # dev env overrides
-│   │   ├── eks                     # eks stack
-│   │   ├── env.hcl                 # default environment configuration
-│   │   ├── storage                 # storage stack
-│   │   ├── terragrunt.hcl          # terragrunt root configuration
-│   │   ├── user-access             # user access stack
-│   │   └── vpc                     # network stack
+│   │   ├── addons                  # Eks add-on stack
+│   │   ├── devenv.hcl              # Dev env overrides
+│   │   ├── eks                     # Eks stack
+│   │   ├── env.hcl                 # Default environment configuration
+│   │   ├── storage                 # Storage stack
+│   │   ├── terragrunt.hcl          # Terragrunt root configuration
+│   │   ├── user-access             # User access stack
+│   │   └── vpc                     # Network stack
 │   └── modules                     # TERRAFORM MODULES
 │       ├── addons
 │       ├── storage
 │       └── users-iam
 └── services                        # EXTRA KUBERNETES RESOURCES
-    ├── apps                        # ArgoCD applications for services
-    └── global                      # Kustomize files
+    ├── apps                        # ArgoCD applications
+    └── global
         ├── storage-classes         # Storage classes
-        └── users-iam               # Cluster roles and role bindings for user permissions
+        └── users-iam               # Cluster roles and role bindings for user access
 ```
 
 ## Deployment
@@ -61,7 +67,10 @@ Update your local `.kube/config` file.
 aws eks update-kubeconfig --name demo --region eu-west-1
 ```
 
-Deploy additional resources to the cluster.
+Cluster additional resources and examples are deployed with ArgoCD with app of apps pattern.
+Root ArgoCD applications are defined in `argocd-apps` directory.
+
+To deploy extra resources and examples run.
 ```bash
 kubectl apply -f argocd-apps
 ```
@@ -78,6 +87,7 @@ kubectl port-forward -n argocd svc/argocd-server 8080:80
 ```
 
 Login to `localhost:8080` with username `admin` and password from previous step.
+It will take a couple of minutes to scale the worker nodes to handle all the examples.
 
 
 
