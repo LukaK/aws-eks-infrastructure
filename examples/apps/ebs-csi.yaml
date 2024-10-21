@@ -2,7 +2,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: users-iam
+  name: ebs-csi
   namespace: argocd
 
   # remove resources when deleting application
@@ -13,7 +13,7 @@ spec:
   source:
     repoURL: https://github.com/LukaK/aws-eks-infrastructure.git
     targetRevision: argo-examples
-    path: services/global/users-iam
+    path: examples/ebs-csi
   destination:
     server: https://kubernetes.default.svc
   syncPolicy:
