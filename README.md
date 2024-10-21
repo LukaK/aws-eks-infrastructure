@@ -317,6 +317,9 @@ helm show-values eks-charts/aws-load-balancer-controller --version VERSION
 
 ArgoCD is continuous deployment tool for kubernetes platform that ensures that the state of the cluster is aligned with the git repository.
 
+Examples and extra resources are deployed with ArgoCD and app of apps pattern.
+Root ArgoCD applications are in `argocd-apps`. Applications for services are in `services/apps` and applications for examples are in `examples/apps`.
+
 ArgoCD is installed with helm and the latest version at the time of writing.
 To upgrade the version use the command below to find out the new version and update the corresponding module parametar.
 
@@ -331,18 +334,9 @@ To see default chart values use the command below.
 helm show-values argo/argo-cd --version VERSION
 ```
 
-## Examples
-
-Deploy the examples.
-```bash
-kubectl apply --recursive -f examples/
-```
 ## Cleanup
 ```bash
-# delete examples
-kubectl delete --recursive -f examples/
-
-# delete services
+# delete services and examples
 kubectl delete -f argocd-apps
 
 # delete infrastructure
