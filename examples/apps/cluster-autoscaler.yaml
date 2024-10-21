@@ -2,7 +2,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: cluster-autoscaler
+  name: example-cluster-autoscaler
   namespace: argocd
 
   # remove resources when deleting application

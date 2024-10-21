@@ -2,7 +2,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: hpa
+  name: example-hpa
   namespace: argocd
 
   # remove resources when deleting application

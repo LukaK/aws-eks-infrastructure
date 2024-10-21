@@ -2,7 +2,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: efs
+  name: example-efs
   namespace: argocd
 
   # remove resources when deleting application
