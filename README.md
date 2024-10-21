@@ -30,14 +30,11 @@ Directory structure is shown below.
 │       ├── addons
 │       ├── storage
 │       └── users-iam
-└── services
+└── services                        # EXTRA KUBERNETES RESOURCES
     ├── apps                        # ArgoCD applications for services
-    ├── base                        # Kustomize base files
-    │   ├── storage-classes
-    │   └── users-iam
-    └── global                      # Kustomize base classes
-        ├── storage-classes
-        └── users-iam
+    └── global                      # Kustomize files
+        ├── storage-classes         # Storage classes
+        └── users-iam               # Cluster roles and role bindings for user permissions
 ```
 
 ## Deployment
