@@ -12,7 +12,7 @@ spec:
   project: default
   source:
     repoURL: https://github.com/LukaK/aws-eks-infrastructure.git
-    targetRevision: argo-examples
+    targetRevision: main
     path: examples/apps
   destination:
     server: https://kubernetes.default.svc
