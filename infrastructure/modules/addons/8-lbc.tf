@@ -16,11 +16,15 @@ resource "aws_iam_role" "aws_lbc" {
       },
     ]
   })
+
+  tags = var.tags
 }
 
 resource "aws_iam_policy" "aws_lbc" {
   policy = file("./iam/lbc-policy.json")
   name   = "AWSLoadBalancerController"
+
+  tags = var.tags
 }
 
 resource "aws_iam_role_policy_attachment" "aws_lbc" {

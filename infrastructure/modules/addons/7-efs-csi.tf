@@ -17,6 +17,7 @@ resource "aws_iam_role" "efs_csi_driver" {
     ]
   })
 
+  tags = var.tags
 }
 
 resource "aws_iam_role_policy_attachment" "efs_csi_driver" {
