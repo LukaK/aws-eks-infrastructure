@@ -16,3 +16,8 @@ variable "viewer_rbac_group_name" {
   description = "Kubernetes RBAC viewer group"
   default     = "viewer"
 }
+
+variable "tags" {
+  type    = map(string)
+  default = {}
+}

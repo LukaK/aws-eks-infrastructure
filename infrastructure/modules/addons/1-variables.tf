@@ -56,3 +56,8 @@ variable "argocd_chart_version" {
   description = "Helm chart version for argocd"
   default     = "7.6.12"
 }
+
+variable "tags" {
+  type    = map(string)
+  default = {}
+}

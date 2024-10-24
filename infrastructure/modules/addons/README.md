@@ -52,6 +52,7 @@ No modules.
 | <a name="input_metric_server_chart_version"></a> [metric\_server\_chart\_version](#input\_metric\_server\_chart\_version) | Helm chart version for metric server | `string` | `"3.12.1"` | no |
 | <a name="input_pod_identity_version"></a> [pod\_identity\_version](#input\_pod\_identity\_version) | Version of the pod identity agent | `string` | `"v1.3.2-eksbuild.2"` | no |
 | <a name="input_region"></a> [region](#input\_region) | Aws region | `string` | `"eu-west-1"` | no |
+| <a name="input_tags"></a> [tags](#input\_tags) | n/a | `map(string)` | `{}` | no |
 
 ## Outputs
 

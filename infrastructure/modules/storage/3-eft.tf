@@ -5,6 +5,8 @@ resource "aws_efs_file_system" "this" {
   performance_mode = "generalPurpose"
   throughput_mode  = "bursting"
   encrypted        = true
+
+  tags = var.tags
 }
 
 resource "aws_efs_mount_target" "zone" {

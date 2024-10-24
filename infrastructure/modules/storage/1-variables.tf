@@ -2,6 +2,7 @@ variable "cluster_name" {
   type        = string
   description = "Eks cluster name"
 }
+
 variable "efs_storage_configuration" {
   description = "Efs storage configuration"
   type = object({

@@ -36,6 +36,7 @@ No modules.
 |------|-------------|------|---------|:--------:|
 | <a name="input_admin_rbac_group_name"></a> [admin\_rbac\_group\_name](#input\_admin\_rbac\_group\_name) | Kubernetes RBAC admin group | `string` | `"admin"` | no |
 | <a name="input_cluster_name"></a> [cluster\_name](#input\_cluster\_name) | Eks cluster name | `string` | n/a | yes |
+| <a name="input_tags"></a> [tags](#input\_tags) | n/a | `map(string)` | `{}` | no |
 | <a name="input_viewer_rbac_group_name"></a> [viewer\_rbac\_group\_name](#input\_viewer\_rbac\_group\_name) | Kubernetes RBAC viewer group | `string` | `"viewer"` | no |
 
 ## Outputs

@@ -14,6 +14,8 @@ resource "aws_iam_role" "eks_viewer" {
       },
     ]
   })
+
+  tags = var.tags
 }
 
 resource "aws_iam_policy" "eks_viewer" {
@@ -44,6 +46,7 @@ resource "aws_iam_policy" "eks_viewer" {
       },
     ]
   })
+  tags = var.tags
 }
 
 # attach viewer policy to the viewer role

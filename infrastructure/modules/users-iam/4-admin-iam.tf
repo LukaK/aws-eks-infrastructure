@@ -14,6 +14,9 @@ resource "aws_iam_role" "eks_admin" {
       },
     ]
   })
+
+  tags = var.tags
+
 }
 
 resource "aws_iam_policy" "eks_admin" {
@@ -43,6 +46,9 @@ resource "aws_iam_policy" "eks_admin" {
       },
     ]
   })
+
+  tags = var.tags
+
 }
 
 # attach admin policy to the admin role

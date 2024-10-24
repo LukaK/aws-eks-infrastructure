@@ -19,6 +19,7 @@ resource "aws_iam_policy" "eks_admin_group" {
       },
     ]
   })
+  tags = var.tags
 }
 
 # attach the policy to the eks admins group
@@ -49,6 +50,7 @@ resource "aws_iam_policy" "eks_viewer_group" {
       },
     ]
   })
+  tags = var.tags
 }
 
 # attach the policy to the eks viewers group

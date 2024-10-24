@@ -17,6 +17,8 @@ resource "aws_iam_role" "ebs_csi_driver" {
     ]
   })
 
+  tags = var.tags
+
 }
 
 resource "aws_iam_role_policy_attachment" "ebs_csi_driver" {
@@ -41,6 +43,8 @@ resource "aws_iam_policy" "ebs_csi_driver_encryption" {
       },
     ]
   })
+
+  tags = var.tags
 }
 
 resource "aws_iam_role_policy_attachment" "ebs_csi_driver_encryption" {
@@ -60,4 +64,6 @@ resource "aws_eks_addon" "ebs_csi_driver" {
   addon_name               = "aws-ebs-csi-driver"
   addon_version            = var.ebs_csi_driver_version
   service_account_role_arn = aws_iam_role.ebs_csi_driver.arn
+
+  tags = var.tags
 }
