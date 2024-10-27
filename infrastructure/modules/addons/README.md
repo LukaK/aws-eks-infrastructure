@@ -37,6 +37,7 @@ No modules.
 | [helm_release.aws_lbc](https://registry.terraform.io/providers/hashicorp/helm/2.16.0/docs/resources/release) | resource |
 | [helm_release.cluster_autoscaler](https://registry.terraform.io/providers/hashicorp/helm/2.16.0/docs/resources/release) | resource |
 | [helm_release.efs_csi_driver](https://registry.terraform.io/providers/hashicorp/helm/2.16.0/docs/resources/release) | resource |
+| [helm_release.external_nginx](https://registry.terraform.io/providers/hashicorp/helm/2.16.0/docs/resources/release) | resource |
 | [helm_release.metric_server](https://registry.terraform.io/providers/hashicorp/helm/2.16.0/docs/resources/release) | resource |
 
 ## Inputs
@@ -50,6 +51,7 @@ No modules.
 | <a name="input_ebs_csi_driver_version"></a> [ebs\_csi\_driver\_version](#input\_ebs\_csi\_driver\_version) | Version of the ebs csi driver. | `string` | `"v1.35.0-eksbuild.1"` | no |
 | <a name="input_efs_csi_chart_version"></a> [efs\_csi\_chart\_version](#input\_efs\_csi\_chart\_version) | Helm chart version for efs csi driver | `string` | `"3.0.8"` | no |
 | <a name="input_metric_server_chart_version"></a> [metric\_server\_chart\_version](#input\_metric\_server\_chart\_version) | Helm chart version for metric server | `string` | `"3.12.1"` | no |
+| <a name="input_nginx_chart_version"></a> [nginx\_chart\_version](#input\_nginx\_chart\_version) | Helm chart version for nginx | `string` | `"4.10.1"` | no |
 | <a name="input_pod_identity_version"></a> [pod\_identity\_version](#input\_pod\_identity\_version) | Version of the pod identity agent | `string` | `"v1.3.2-eksbuild.2"` | no |
 | <a name="input_region"></a> [region](#input\_region) | Aws region | `string` | `"eu-west-1"` | no |
 | <a name="input_tags"></a> [tags](#input\_tags) | n/a | `map(string)` | `{}` | no |
