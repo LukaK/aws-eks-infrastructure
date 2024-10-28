@@ -215,7 +215,7 @@ helm search repo metric-server/metric-server
 
 To see default chart values use the command below.
 ```bash
-helm show-values metric-server/metric-server --version VERSION
+helm show values metric-server/metric-server --version VERSION
 ```
 
 ### Cluster Autoscaler
@@ -239,7 +239,7 @@ helm search repo autoscaler/cluster-autoscaler
 
 To see default chart values use the command below.
 ```bash
-helm show-values autoscaler/cluster-autoscaler --version VERSION
+helm show values autoscaler/cluster-autoscaler --version VERSION
 ```
 
 ### Ebs Csi Driver
@@ -279,7 +279,7 @@ helm search repo efs-csi/aws-efs-csi-driver
 
 To see default chart values use the command below.
 ```bash
-helm show-values efs-csi/aws-efs-csi-driver --version VERSION
+helm show values efs-csi/aws-efs-csi-driver --version VERSION
 ```
 
 ### Load Balancer Controller
@@ -312,7 +312,7 @@ helm search repo eks-charts/aws-load-balancer-controller
 
 To see default chart values use the command below.
 ```bash
-helm show-values eks-charts/aws-load-balancer-controller --version VERSION
+helm show values eks-charts/aws-load-balancer-controller --version VERSION
 ```
 
 ### Nginx
@@ -340,7 +340,7 @@ helm search repo nginx/ingress-nginx
 
 To see default chart values use the command below.
 ```bash
-helm show-values nginx/ingress-nginx --version VERSION
+helm show values nginx/ingress-nginx --version VERSION
 ```
 
 
@@ -362,7 +362,7 @@ helm search repo argo/argo-cd
 
 To see default chart values use the command below.
 ```bash
-helm show-values argo/argo-cd --version VERSION
+helm show values argo/argo-cd --version VERSION
 ```
 
 ## Cleanup
