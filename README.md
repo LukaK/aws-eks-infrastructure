@@ -21,7 +21,8 @@ Directory structure is shown below.
 │   ├── ebs-csi
 │   ├── efs
 │   ├── hpa
-│   └── lbc
+│   ├── lbc
+│   └── nginx-external
 ├── infrastructure                  # INFRASTRUCTURE ( TERRAGRUNT )
 │   ├── live
 │   │   ├── addons                  # Eks add-on stack
@@ -289,8 +290,9 @@ When service of type `LoadBalancer` is created, controller will provision networ
 For every service of type `LoadBalancer` one network load balancer is provisioned.
 
 When ingress object is defined, controller will provision application load balancer.
-To keep number of application load balancers down, define ingress groups.
-Every ingress group maps to one application load balancer.
+To keep number of application load balancers down, define ingress groups, where every ingress group maps to one application load balancer.
+
+Other option is to use nginx reverse proxy, deployed in the cluster, to route the traffic and network load balancers just as an entry point to the cluster ([see below](#nginx-external)).
 
 Examples on load balancer controller can be found [here](./examples/lbc/)
 
@@ -312,6 +314,35 @@ To see default chart values use the command below.
 ```bash
 helm show-values eks-charts/aws-load-balancer-controller --version VERSION
 ```
+
+### Nginx
+
+Nginx reverse proxy, deployed in the cluster, to route http/https traffic in the cluster.
+Serves as an alternative way of routing traffic where traffic is passed to the reverse proxy from the load balancers and routed within a cluster.
+Better solution than routing with aws load balancers since it is easier to collect telemetry from nginx then from aws.
+
+When the nginx is deployed, network load balancer is created with the ip target group pointing to the nginx pods.
+By default 80 and 443 port are forwarded.
+Both public and private nginx are deployed for public and private network traffic respectfully.
+
+
+Examples on external nginx can be found [here](./examples/nginx-external/)
+
+
+Nginx ingress is installed with helm and the latest version at the time of writing.
+To upgrade the version use the command below to find out the new version and update the corresponding module parametar.
+
+```bash
+helm repo add nginx https://kubernetes.github.io/ingress-nginx
+helm repo update
+helm search repo nginx/ingress-nginx
+```
+
+To see default chart values use the command below.
+```bash
+helm show-values nginx/ingress-nginx --version VERSION
+```
+
 
 ### ArgoCD
 

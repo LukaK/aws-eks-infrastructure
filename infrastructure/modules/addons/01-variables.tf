@@ -60,7 +60,7 @@ variable "argocd_chart_version" {
 variable "nginx_chart_version" {
   type        = string
   description = "Helm chart version for nginx"
-  default     = "4.10.1"
+  default     = "4.11.3"
 }
 
 variable "tags" {
