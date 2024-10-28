@@ -38,6 +38,7 @@ No modules.
 | [helm_release.cluster_autoscaler](https://registry.terraform.io/providers/hashicorp/helm/2.16.0/docs/resources/release) | resource |
 | [helm_release.efs_csi_driver](https://registry.terraform.io/providers/hashicorp/helm/2.16.0/docs/resources/release) | resource |
 | [helm_release.external_nginx](https://registry.terraform.io/providers/hashicorp/helm/2.16.0/docs/resources/release) | resource |
+| [helm_release.internal_nginx](https://registry.terraform.io/providers/hashicorp/helm/2.16.0/docs/resources/release) | resource |
 | [helm_release.metric_server](https://registry.terraform.io/providers/hashicorp/helm/2.16.0/docs/resources/release) | resource |
 
 ## Inputs
