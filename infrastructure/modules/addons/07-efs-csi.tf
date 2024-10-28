@@ -46,5 +46,5 @@ resource "helm_release" "efs_csi_driver" {
     value = "efs-csi-controller-sa"
   }
 
-  depends_on = [helm_release.cluster_autoscaler]
+  depends_on = [helm_release.cluster_autoscaler, aws_iam_role_policy_attachment.efs_csi_driver]
 }

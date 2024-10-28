@@ -58,5 +58,5 @@ resource "helm_release" "aws_lbc" {
     value = "aws-load-balancer-controller"
   }
 
-  depends_on = [helm_release.efs_csi_driver]
+  depends_on = [helm_release.efs_csi_driver, aws_iam_role_policy_attachment.aws_lbc]
 }
