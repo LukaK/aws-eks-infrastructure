@@ -56,6 +56,9 @@ inputs = {
   eks_managed_node_group_defaults = local.configuration.eks_managed_node_group_defaults
   eks_managed_node_groups         = local.configuration.eks_managed_node_groups
 
+  # additional rules for worker node security group
+  node_security_group_additional_rules = local.configuration.node_security_group_additional_rules
+
   # tags
   tags = local.tags
 }
