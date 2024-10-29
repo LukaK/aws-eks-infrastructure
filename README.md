@@ -22,7 +22,7 @@ Directory structure is shown below.
 │   ├── efs
 │   ├── hpa
 │   ├── lbc
-│   └── nginx-external
+│   └── nginx
 ├── infrastructure                  # INFRASTRUCTURE ( TERRAGRUNT )
 │   ├── live
 │   │   ├── addons                  # Eks add-on stack
@@ -292,7 +292,7 @@ For every service of type `LoadBalancer` one network load balancer is provisione
 When ingress object is defined, controller will provision application load balancer.
 To keep number of application load balancers down, define ingress groups, where every ingress group maps to one application load balancer.
 
-Other option is to use nginx reverse proxy, deployed in the cluster, to route the traffic and network load balancers just as an entry point to the cluster ([see below](#nginx-external)).
+Other option is to use nginx reverse proxy, deployed in the cluster, to route the traffic and network load balancers just as an entry point to the cluster ([see below](#nginx)).
 
 Examples on load balancer controller can be found [here](./examples/lbc/)
 
@@ -326,7 +326,7 @@ By default 80 and 443 port are forwarded.
 Both public and private nginx are deployed for public and private network traffic respectfully.
 
 
-Examples on external nginx can be found [here](./examples/nginx-external/)
+Examples on external nginx can be found [here](./examples/nginx/)
 
 
 Nginx ingress is installed with helm and the latest version at the time of writing.

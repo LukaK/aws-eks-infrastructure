@@ -5,4 +5,5 @@ resources:
   - 0-namespace.yaml
   - 1-deployment.yaml
   - 2-service.yaml
-  - 3-ingress.yaml
+  - 3-public-ingress.yaml
+  - 4-private-ingress.yaml

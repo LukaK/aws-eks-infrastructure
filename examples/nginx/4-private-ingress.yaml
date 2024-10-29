@@ -1,0 +1,20 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: private-myapp
+  namespace: nginx-example
+spec:
+  ingressClassName: internal-nginx
+  rules:
+    - host: private.lukakrapic.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: myapp
+                port:
+                  number: 8080
+

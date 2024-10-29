@@ -3,7 +3,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: myapp
-  namespace: nginx-external-example
+  namespace: nginx-example
 spec:
   selector:
     matchLabels:

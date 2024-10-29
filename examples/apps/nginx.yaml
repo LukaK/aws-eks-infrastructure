@@ -2,7 +2,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: example-nginx-external
+  name: example-nginx
   namespace: argocd
 
   # remove resources when deleting application
@@ -13,7 +13,7 @@ spec:
   source:
     repoURL: https://github.com/LukaK/aws-eks-infrastructure.git
     targetRevision: main
-    path: examples/nginx-external
+    path: examples/nginx
   destination:
     server: https://kubernetes.default.svc
   syncPolicy:
