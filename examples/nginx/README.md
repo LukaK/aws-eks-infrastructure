@@ -9,5 +9,5 @@ Ingress using public ingress class should have `Address` of public load balancer
 
 Test the public ingress.
 ```bash
-curl -i --header "Host: test.lukakrapic.com" http://PUBLIC-ADDRESS
+curl -i --header "Host: public.lukakrapic.com" http://PUBLIC-ADDRESS
 ```
