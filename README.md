@@ -181,6 +181,8 @@ List of add-ons:
 - ebs csi driver
 - efs csi controller
 - load balancer controller
+- nginx ingress controller
+- external dns controller
 - ArgoCD
 
 ### Pod identity

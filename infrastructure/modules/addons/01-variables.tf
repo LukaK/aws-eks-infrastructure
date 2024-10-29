@@ -63,6 +63,12 @@ variable "nginx_chart_version" {
   default     = "4.11.3"
 }
 
+variable "external_dns_chart_version" {
+  type        = string
+  description = "Helm chart version for external dns"
+  default     = "1.15.0"
+}
+
 variable "tags" {
   type    = map(string)
   default = {}
