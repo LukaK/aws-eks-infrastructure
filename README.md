@@ -353,7 +353,10 @@ helm show values nginx/ingress-nginx --version VERSION
 ### External DNS
 
 External DNS controller is responsible for managing route 53 dns records from kubernetes.
-It is deployed with `sync` policy allowing it to create/delete records on resource creation/deletion.
+
+When the ingress resource is created dns records are automatically updated.
+When deploying service resources you can annotate them to create custom dns entries.
+External dns is deployed with `sync` policy allowing it to create/delete records on resource creation/deletion.
 
 Examples of external dns can be found [here](./examples/external-dns/)
 
