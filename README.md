@@ -20,6 +20,7 @@ Directory structure is shown below.
 │   ├── cluster-autoscaler
 │   ├── ebs-csi
 │   ├── efs
+│   ├── external-dns
 │   ├── hpa
 │   ├── lbc
 │   └── nginx
@@ -129,6 +130,9 @@ Contains resources defined in `storage` terraform module.
 It deploys efs file system and mount targets in private subnets so that worker nodes can mount the file system with efs csi driver.
 It also contains kubernetes storage class resource.
 
+## Dns Stack
+
+Contains route 53 hosted zone that is used with external dns examples.
 
 ## User Access Stack
 
@@ -345,6 +349,27 @@ To see default chart values use the command below.
 helm show values nginx/ingress-nginx --version VERSION
 ```
 
+
+### External DNS
+
+External DNS controller is responsible for managing route 53 dns records from kubernetes.
+It is deployed with `sync` policy allowing it to create/delete records on resource creation/deletion.
+
+Examples of external dns can be found [here](./examples/external-dns/)
+
+External dns is installed with helm and the latest version at the time of writing.
+To upgrade the version use the command below to find out the new version and update the corresponding module parametar.
+
+```bash
+helm repo add external-dns https://kubernetes-sigs.github.io/external-dns
+helm repo update
+helm search repo external-dns/external-dns
+```
+
+To see default chart values use the command below.
+```bash
+helm show values external-dns/external-dns --version VERSION
+```
 
 ### ArgoCD
 

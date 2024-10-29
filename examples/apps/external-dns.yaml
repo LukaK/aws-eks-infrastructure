@@ -1,0 +1,27 @@
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: example-external-dns
+  namespace: argocd
+
+  # remove resources when deleting application
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/LukaK/aws-eks-infrastructure.git
+    targetRevision: main
+    path: examples/external-dns
+  destination:
+    server: https://kubernetes.default.svc
+  syncPolicy:
+    automated:
+      prune: true     # delete resources
+      selfHeal: true  # drift override
+    syncOptions:
+      - Validate=true          # validate deployment fields
+      - CreateNamespace=false  # don't create namespaces automatically
+      - PrunePropagationPolicy=foreground
+      - PruneLast=true

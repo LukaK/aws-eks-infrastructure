@@ -31,7 +31,7 @@ resource "aws_iam_policy" "external_dns" {
           "route53:ChangeResourceRecordSets"
         ]
         Effect   = "Allow"
-        Resource = "arn:aws:route53:::hostedzone/"
+        Resource = "arn:aws:route53:::hostedzone/*"
       },
       {
         Action = [
@@ -72,6 +72,11 @@ resource "helm_release" "external_dns" {
   set {
     name  = "serviceAccount.name"
     value = "external-dns-sa"
+  }
+
+  set {
+    name  = "policy"
+    value = "sync"
   }
 
   depends_on = [helm_release.aws_lbc, aws_iam_role_policy_attachment.external_dns]
