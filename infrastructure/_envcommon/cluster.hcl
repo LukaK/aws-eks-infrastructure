@@ -1,11 +1,12 @@
 locals {
 
   # networking
-  vpc_name            = "terraform-eks-vpc"
-  vpc_cidr            = "10.0.0.0/16"
-  vpc_azs             = ["eu-west-1a", "eu-west-1b"]
-  vpc_private_subnets = ["10.0.0.0/19", "10.0.32.0/19"]
-  vpc_public_subnets  = ["10.0.64.0/19", "10.0.96.0/19"]
+  vpc_name              = "terraform-eks-vpc"
+  vpc_cidr              = "10.0.0.0/16"
+  vpc_azs               = ["eu-west-1a", "eu-west-1b"]
+  vpc_private_subnets   = ["10.0.0.0/19", "10.0.32.0/19"]
+  vpc_public_subnets    = ["10.0.64.0/19", "10.0.96.0/19"]
+  dns_sub_domain_prefix = "api"
 
   # cluster configuration
   cluster_name    = "demo"

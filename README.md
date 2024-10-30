@@ -3,7 +3,7 @@
 Project holds resources for deploying production ready aws eks cluster with plugins.
 Project is deployed as a terraform project with terragrunt to orchestrate the deployment and ArgoCD to deploy extra resources and examples.
 
-Project is deployed in five stack; networking, eks cluster, eks add-ons, storage and dns.
+Project is deployed in five stack; network, eks cluster, eks add-ons and storage.
 All the files for terragrunt deployment are in `infrastructure/live` folder.
 Terraform modules are in the project in `infrastructure/modules` directory.
 
@@ -30,12 +30,13 @@ Directory structure is shown below.
 │   │   ├── devenv.hcl              # Dev env overrides
 │   │   ├── eks                     # Eks stack
 │   │   ├── env.hcl                 # Default environment configuration
+│   │   ├── network                 # Network stack
 │   │   ├── storage                 # Storage stack
 │   │   ├── terragrunt.hcl          # Terragrunt root configuration
-│   │   ├── user-access             # User access stack
-│   │   └── vpc                     # Network stack
+│   │   └── user-access             # User access stack
 │   └── modules                     # TERRAFORM MODULES
 │       ├── addons
+│       ├── network
 │       ├── storage
 │       └── users-iam
 └── services                        # EXTRA KUBERNETES RESOURCES
@@ -109,6 +110,8 @@ Only one nat gateway is deployed in one of the public subnets to routes the inte
 | **Public Subnet #2**    | 10.0.96.0/19                  |
 
 
+Route 53 hosted zone is deployed for the specific sub domain that is used with external dns examples.
+
 ## Cluster Configuration
 
 When deployed, aws creates control plane on aws account and network interfaces in public or private subnets depending on the access mode.
@@ -129,10 +132,6 @@ Contains resources defined in `storage` terraform module.
 
 It deploys efs file system and mount targets in private subnets so that worker nodes can mount the file system with efs csi driver.
 It also contains kubernetes storage class resource.
-
-## Dns Stack
-
-Contains route 53 hosted zone that is used with external dns examples.
 
 ## User Access Stack
 

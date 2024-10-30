@@ -1,27 +1,15 @@
 terraform {
-  source = "../../modules/storage"
+  source = "../../../../modules/storage"
 }
 
+# include root configuration, holds components and configurations shared across all modules
 include "root" {
-  path = find_in_parent_folders()
-}
-
-include "env" {
-  path           = find_in_parent_folders("env.hcl")
-  expose         = true
-  merge_strategy = "no_merge"
-}
-
-include "env_override" {
-  path           = find_in_parent_folders("${get_env("ENVIRONMENT", "")}env.hcl")
-  expose         = true
-  merge_strategy = "no_merge"
-
+  path   = find_in_parent_folders()
+  expose = true
 }
 
 locals {
-  configuration = merge(include.env.locals, include.env_override.locals)
-  tags          = merge(include.env.locals.tags, include.env_override.locals.tags)
+  tags = merge(include.root.inputs.tags, { Stack = "Storage" })
 }
 
 dependency "eks" {
@@ -35,7 +23,7 @@ dependency "eks" {
 }
 
 dependency "vpc" {
-  config_path = "../vpc/"
+  config_path = "../network/"
 
   mock_outputs = {
     private_subnets = ["subnet-1234", "subnet-5678"]
@@ -55,7 +43,7 @@ inputs = {
 
 
 generate "helm_provider" {
-  path      = "providers.tf"
+  path      = "helm_provider.tf"
   if_exists = "overwrite_terragrunt"
 
   contents = <<EOF
