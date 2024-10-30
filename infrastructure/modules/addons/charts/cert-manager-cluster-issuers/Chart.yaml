@@ -1,0 +1,6 @@
+apiVersion: v2
+name: cert-manager-cluster-issuers
+description: Cert manager cluster issuers objects with http 01 and dns 01 challenges.
+type: application
+version: 0.1.0
+appVersion: "0.1.0"

@@ -75,6 +75,23 @@ variable "cert_manager_chart_version" {
   default     = "v1.14.5"
 }
 
+variable "cert_manager_notification_email" {
+  type        = string
+  description = "Email to get notified if there is an error with renewing the certificate"
+}
+
+
+variable "hosted_zone_name" {
+  type        = string
+  description = "Name of the route 53 hosted zone"
+}
+
+variable "hosted_zone_id" {
+  type        = string
+  description = "Route 53 hosted zone id"
+}
+
+
 variable "tags" {
   type    = map(string)
   default = {}

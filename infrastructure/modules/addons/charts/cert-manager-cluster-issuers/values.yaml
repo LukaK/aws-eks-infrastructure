@@ -1,0 +1,14 @@
+# aws region
+region: "eu-west-1"
+
+# users email to get notified if the certificate is not renewed
+email: ""
+
+# dns zone name
+dnsZone: ""
+
+# hosted zone id for the cluster issuer
+hostedZoneId: ""
+
+# public zone ingress class for http 01 challenge
+ingressClassName: ""

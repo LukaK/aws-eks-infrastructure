@@ -92,3 +92,37 @@ resource "helm_release" "cert-manager" {
   depends_on = [helm_release.external_nginx]
 }
 
+
+
+resource "helm_release" "cluster_issuers" {
+  name  = "cluster-issuers"
+  chart = "./charts/cert-manager-cluster-issuers"
+
+
+  set {
+    name  = "region"
+    value = var.region
+  }
+
+  set {
+    name  = "email"
+    value = var.cert_manager_notification_email
+  }
+
+  set {
+    name  = "dnsZone"
+    value = var.hosted_zone_name
+  }
+
+  set {
+    name  = "hostedZoneId"
+    value = var.hosted_zone_id
+  }
+
+  set {
+    name  = "ingressClassName"
+    value = "external-nginx"
+  }
+
+  depends_on = [helm_release.cert-manager]
+}

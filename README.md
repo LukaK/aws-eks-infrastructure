@@ -1,13 +1,12 @@
 # Eks with Terraform and Terragrunt
 
 Project holds resources for deploying production ready aws eks cluster with plugins.
-Project is deployed as a terraform project with terragrunt to orchestrate the deployment and ArgoCD to deploy extra resources and examples.
+Project is deployed as a terraform project with terragrunt to orchestrate the deployment and ArgoCD to deploy examples.
 
-Project is deployed in five stack; network, eks cluster, eks add-ons and storage.
-All the files for terragrunt deployment are in `infrastructure/live` folder.
+Project is deployed in five stack; [network](#network-stack), [eks cluster](#cluster-configuration), [eks add-ons](#cluster-add-ons-stack), [storage](#storage-stack) and [user access](#user-access-stack).
+
+All the files for terragrunt deployment are in `infrastructure/` folder.
 Terraform modules are in the project in `infrastructure/modules` directory.
-
-Extra terraform resources for cluster workings are in `services` directory and examples for testing plugins are in `examples` directory.
 
 Directory structure is shown below.
 
@@ -15,8 +14,9 @@ Directory structure is shown below.
 ├── README.md
 ├── argocd-apps                     # ArgoCD root applications
 ├── assets                          # Documentation assets
-├── examples                        # EXAMPLES
+├── examples                        # Examples
 │   ├── apps                        # ArgoCD applications
+│   ├── cert-manager
 │   ├── cluster-autoscaler
 │   ├── ebs-csi
 │   ├── efs
@@ -24,26 +24,34 @@ Directory structure is shown below.
 │   ├── hpa
 │   ├── lbc
 │   └── nginx
-├── infrastructure                  # INFRASTRUCTURE ( TERRAGRUNT )
+├── infrastructure                  # Infrastructure
+│   ├── _envcommon                  # Common variables shared between stacks
+│   │   ├── accounts.hcl
+│   │   ├── cluster.hcl
+│   │   └── domain.hcl
 │   ├── live
-│   │   ├── addons                  # Eks add-on stack
-│   │   ├── devenv.hcl              # Dev env overrides
-│   │   ├── eks                     # Eks stack
-│   │   ├── env.hcl                 # Default environment configuration
-│   │   ├── network                 # Network stack
-│   │   ├── storage                 # Storage stack
-│   │   ├── terragrunt.hcl          # Terragrunt root configuration
-│   │   └── user-access             # User access stack
-│   └── modules                     # TERRAFORM MODULES
-│       ├── addons
-│       ├── network
-│       ├── storage
-│       └── users-iam
-└── services                        # EXTRA KUBERNETES RESOURCES
-    ├── apps                        # ArgoCD applications
+│   │   ├── sandbox
+│   │   │   ├── account.hcl         # Account details
+│   │   │   └── eu-west-1
+│   │   │       ├── addons          # Add-ons stack
+│   │   │       ├── eks             # Eks stack
+│   │   │       ├── environment.hcl # Terragrunt environment values
+│   │   │       ├── network         # Network stack
+│   │   │       ├── region.hcl      # Terragrunt region information
+│   │   │       ├── storage         # Storage stack
+│   │   │       └── user-access     # User access stack
+│   ├── modules                     # Terraform modules
+│   │   ├── addons
+│   │   ├── network
+│   │   ├── storage
+│   │   └── users-iam
+│   └── terragrunt.hcl              # Root terragrunt configuration
+└── services                        # Extra services
+    ├── apps
     └── global
-        ├── storage-classes         # Storage classes
-        └── users-iam               # Cluster roles and role bindings for user access
+        ├── cert-manager
+        ├── storage-classes
+        └── users-iam
 ```
 
 ## Deployment
@@ -52,11 +60,24 @@ Ensure you have the following requirements met:
 - terraform installed
 - terragrunt installed
 - aws account
-- aws account cli access
+- role with admin permissions to deploy the resources
+- user with cli access that can assume the role from previous step
+- domain and route 53 hosted zone
+
+Before deploying the infrastructure populate the necessary information in the `infrastructure/_envcommon` directory.
+
+```bash
+pushd infrastructure/_envcommon
+cp accounts-template.hcl accounts.hcl
+vim accounts.hcl
+
+cp domain-template.hcl domain.hcl
+vim domain.hcl
+```
 
 
 By default resources are deployed in `eu-west-1` region.
-To deploy the infrastructure run the commands below.
+Run the following commands.
 It will take some time to deploy the resources.
 ```bash
 pushd infrastructure/live
@@ -66,6 +87,7 @@ popd
 
 
 Update your local `.kube/config` file.
+Make sure you assume the deployment role from the previous step before updating `.kube/config` file (see [here](#how-to-assume-the-role-and-update-local-kube-config-file))
 ```bash
 aws eks update-kubeconfig --name demo --region eu-west-1
 ```
@@ -110,7 +132,11 @@ Only one nat gateway is deployed in one of the public subnets to routes the inte
 | **Public Subnet #2**    | 10.0.96.0/19                  |
 
 
-Route 53 hosted zone is deployed for the specific sub domain that is used with external dns examples.
+Additionally new dns public hosted zone for the subdomain is deployed in the same account as the solution.
+In the root hosted zone, new NS record is created for `api` subdomain and traffic for that subdomain is routed to the new hosted zone.
+
+Root hosted zone details are provided in `infrastructure/_envcommon/{accounts.hcl,domain.hcl}` files.
+Root hosted zone can be in the same account or in some other aws account.
 
 ## Cluster Configuration
 

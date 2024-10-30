@@ -45,6 +45,7 @@ No modules.
 | [helm_release.aws_lbc](https://registry.terraform.io/providers/hashicorp/helm/2.16.0/docs/resources/release) | resource |
 | [helm_release.cert-manager](https://registry.terraform.io/providers/hashicorp/helm/2.16.0/docs/resources/release) | resource |
 | [helm_release.cluster_autoscaler](https://registry.terraform.io/providers/hashicorp/helm/2.16.0/docs/resources/release) | resource |
+| [helm_release.cluster_issuers](https://registry.terraform.io/providers/hashicorp/helm/2.16.0/docs/resources/release) | resource |
 | [helm_release.efs_csi_driver](https://registry.terraform.io/providers/hashicorp/helm/2.16.0/docs/resources/release) | resource |
 | [helm_release.external_dns](https://registry.terraform.io/providers/hashicorp/helm/2.16.0/docs/resources/release) | resource |
 | [helm_release.external_nginx](https://registry.terraform.io/providers/hashicorp/helm/2.16.0/docs/resources/release) | resource |
@@ -58,11 +59,14 @@ No modules.
 | <a name="input_argocd_chart_version"></a> [argocd\_chart\_version](#input\_argocd\_chart\_version) | Helm chart version for argocd | `string` | `"7.6.12"` | no |
 | <a name="input_aws_lbc_chart_version"></a> [aws\_lbc\_chart\_version](#input\_aws\_lbc\_chart\_version) | Helm chart version for aws load balancer controller | `string` | `"1.9.1"` | no |
 | <a name="input_cert_manager_chart_version"></a> [cert\_manager\_chart\_version](#input\_cert\_manager\_chart\_version) | Helm chart version for cert manager | `string` | `"v1.14.5"` | no |
+| <a name="input_cert_manager_notification_email"></a> [cert\_manager\_notification\_email](#input\_cert\_manager\_notification\_email) | Email to get notified if there is an error with renewing the certificate | `string` | n/a | yes |
 | <a name="input_cluster_autoscaler_chart_version"></a> [cluster\_autoscaler\_chart\_version](#input\_cluster\_autoscaler\_chart\_version) | Helm chart version for cluster autoscaler | `string` | `"9.37.0"` | no |
 | <a name="input_cluster_name"></a> [cluster\_name](#input\_cluster\_name) | Eks cluster name | `string` | n/a | yes |
 | <a name="input_ebs_csi_driver_version"></a> [ebs\_csi\_driver\_version](#input\_ebs\_csi\_driver\_version) | Version of the ebs csi driver. | `string` | `"v1.35.0-eksbuild.1"` | no |
 | <a name="input_efs_csi_chart_version"></a> [efs\_csi\_chart\_version](#input\_efs\_csi\_chart\_version) | Helm chart version for efs csi driver | `string` | `"3.0.8"` | no |
 | <a name="input_external_dns_chart_version"></a> [external\_dns\_chart\_version](#input\_external\_dns\_chart\_version) | Helm chart version for external dns | `string` | `"1.15.0"` | no |
+| <a name="input_hosted_zone_id"></a> [hosted\_zone\_id](#input\_hosted\_zone\_id) | Route 53 hosted zone id | `string` | n/a | yes |
+| <a name="input_hosted_zone_name"></a> [hosted\_zone\_name](#input\_hosted\_zone\_name) | Name of the route 53 hosted zone | `string` | n/a | yes |
 | <a name="input_metric_server_chart_version"></a> [metric\_server\_chart\_version](#input\_metric\_server\_chart\_version) | Helm chart version for metric server | `string` | `"3.12.1"` | no |
 | <a name="input_nginx_chart_version"></a> [nginx\_chart\_version](#input\_nginx\_chart\_version) | Helm chart version for nginx | `string` | `"4.11.3"` | no |
 | <a name="input_pod_identity_version"></a> [pod\_identity\_version](#input\_pod\_identity\_version) | Version of the pod identity agent | `string` | `"v1.3.2-eksbuild.2"` | no |
