@@ -1,0 +1,19 @@
+---
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+  name: dns-01-production
+spec:
+  acme:
+    email: EMAIL
+    server: https://acme-v02.api.letsencrypt.org/directory
+    privateKeySecretRef:
+      name: dns-01-production-cluster-issuer
+    solvers:
+      - selector:
+          dnsZones:
+            - ZONE
+        dns01:
+          route53:
+            region: REGION
+            hostedZoneID: HOSTED-ZONE-ID

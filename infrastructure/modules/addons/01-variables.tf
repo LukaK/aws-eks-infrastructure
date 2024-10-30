@@ -69,6 +69,12 @@ variable "external_dns_chart_version" {
   default     = "1.15.0"
 }
 
+variable "cert_manager_chart_version" {
+  type        = string
+  description = "Helm chart version for cert manager"
+  default     = "v1.14.5"
+}
+
 variable "tags" {
   type    = map(string)
   default = {}

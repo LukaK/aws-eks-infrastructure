@@ -1,0 +1,26 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: public-myapp
+  namespace: cert-manager-example
+  annotations:
+    cert-manager.io/cluster-issuer: http-01-production
+spec:
+  ingressClassName: external-nginx
+  tls:
+    - hosts:
+        - cert-manager.lukakrapic.com
+      secretName: cert-manager-lukakrapic-com
+  rules:
+    - host: cert-manager.lukakrapic.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: myapp
+                port:
+                  number: 8080
+
