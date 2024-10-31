@@ -2,18 +2,18 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: public-myapp
+  name: dns-01-myapp
   namespace: cert-manager-example
   annotations:
-    cert-manager.io/cluster-issuer: http-01-production
+    cert-manager.io/cluster-issuer: dns-01-cluster-issuer
 spec:
   ingressClassName: external-nginx
   tls:
     - hosts:
-        - cert-manager.lukakrapic.com
-      secretName: cert-manager-lukakrapic-com
+        - cert-manager-dns.api.itguyjournals.com
+      secretName: cert-manager-dns-itguyjournals-com
   rules:
-    - host: cert-manager.lukakrapic.com
+    - host: cert-manager-dns.api.itguyjournals.com
       http:
         paths:
           - path: /

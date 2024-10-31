@@ -124,5 +124,15 @@ resource "helm_release" "cluster_issuers" {
     value = "external-nginx"
   }
 
+  set {
+    name  = "httpClusterIssuerName"
+    value = "http-01-cluster-issuer"
+  }
+
+  set {
+    name  = "dnsClusterIssuerName"
+    value = "dns-01-cluster-issuer"
+  }
+
   depends_on = [helm_release.cert-manager]
 }
