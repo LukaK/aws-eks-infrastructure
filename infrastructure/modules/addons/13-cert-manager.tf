@@ -95,8 +95,10 @@ resource "helm_release" "cert-manager" {
 
 
 resource "helm_release" "cluster_issuers" {
-  name  = "cluster-issuers"
-  chart = "./charts/cert-manager-cluster-issuers"
+  name             = "cluster-issuers"
+  chart            = "./charts/cert-manager-cluster-issuers"
+  namespace        = "cert-manager"
+  create_namespace = true
 
 
   set {
