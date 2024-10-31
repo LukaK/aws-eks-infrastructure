@@ -37,7 +37,7 @@ inputs = {
     storage_class_name                  = "efs"
     storage_class_directory_permissions = "700"
     subnet_ids                          = dependency.vpc.outputs.private_subnets
-    security_group_ids                  = [dependency.eks.outputs.cluster_primary_security_group_id, dependency.eks.outputs.node_security_group_id]
+    security_group_ids                  = [dependency.eks.outputs.node_security_group_id]
   }
 }
 
