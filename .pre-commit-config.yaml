@@ -11,8 +11,8 @@ repos:
     hooks:
       - id: terragrunt-hclfmt
       - id: terraform-fmt
-      # TODO: Issue with provider aliases and validation
-      # - id: terraform-validate 
+      # NOTE: https://github.com/hashicorp/terraform/issues/28490#issuecomment-2437708356
+      # - id: terraform-validate
       - id: tflint
         args: ["--minimum-failure-severity=error"]
 
