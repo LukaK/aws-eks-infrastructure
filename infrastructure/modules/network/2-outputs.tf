@@ -12,3 +12,8 @@ output "hosted_zone_id" {
   value       = aws_route53_zone.this.zone_id
   description = "Hosted zone id"
 }
+
+output "hosted_zone_name" {
+  value       = var.sub_domain_name
+  description = "Name of the hosted zone"
+}

@@ -53,11 +53,19 @@ dependency "eks" {
   }
 }
 
+dependency "vpc" {
+  config_path = "../network/"
+
+  mock_outputs = {
+    hosted_zone_id = "123asdfa"
+  }
+}
+
 # override inputs from the root and add additional inputs to the module
 inputs = {
   tags                            = local.tags
   cluster_name                    = dependency.eks.outputs.cluster_name
-  hosted_zone_name                = include.domain.locals.sub_domain_name
-  hosted_zone_id                  = include.domain.locals.primary_zone_id
+  hosted_zone_id                  = dependency.vpc.outputs.hosted_zone_id
+  hosted_zone_name                = dependency.vpc.outputs.hosted_zone_name
   cert_manager_notification_email = include.domain.locals.notification_email
 }

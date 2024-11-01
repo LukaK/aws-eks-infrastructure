@@ -43,6 +43,7 @@
 | Name | Description |
 |------|-------------|
 | <a name="output_hosted_zone_id"></a> [hosted\_zone\_id](#output\_hosted\_zone\_id) | Hosted zone id |
+| <a name="output_hosted_zone_name"></a> [hosted\_zone\_name](#output\_hosted\_zone\_name) | Name of the hosted zone |
 | <a name="output_private_subnets"></a> [private\_subnets](#output\_private\_subnets) | List of private subnet cidrs |
 | <a name="output_vpc_id"></a> [vpc\_id](#output\_vpc\_id) | Vpc id |
 <!-- END_TF_DOCS -->
