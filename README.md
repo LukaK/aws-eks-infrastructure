@@ -1,14 +1,22 @@
 # Eks with Terraform and Terragrunt
 
-Project holds resources for deploying production ready aws eks cluster with plugins.
+Project holds resources for deploying production ready aws eks cluster with pre installed plugins ( [see here](#cluster-add-ons-stack) ).
 Project is deployed as a terraform project with terragrunt to orchestrate the deployment and ArgoCD to deploy examples.
 
-Project is deployed in five stack; [network](#network-stack), [eks cluster](#cluster-configuration), [eks add-ons](#cluster-add-ons-stack), [storage](#storage-stack) and [user access](#user-access-stack).
+Project is deployed in five interdependent stack which are explained below. These are [network](#network-stack), [eks cluster](#cluster-configuration), [eks add-ons](#cluster-add-ons-stack), [storage](#storage-stack) and [user access](#user-access-stack).
 
-All the files for terragrunt deployment are in `infrastructure/` folder.
-Terraform modules are in the project in `infrastructure/modules` directory.
+## Directory Structure
 
-Directory structure is shown below.
+Project is organized in the following way.
+
+All infrastructure configuration is in `infrastructure/` directory.
+Terraform modules for all stacks, excluding eks cluster, are in `infrastructure/modules`.
+
+Configuration values for specific environment are in `infrastructure/_envcommon` and they need to be populated before deploying the infrastructure.
+
+Directory `infrastructure/live` holds terragrunt configuration files for the five stacks.
+Directory is organized by account and availability zone with corresponding configuration files on every level.
+
 
 ```bash
 ├── README.md
@@ -54,69 +62,142 @@ Directory structure is shown below.
         └── users-iam
 ```
 
-## Deployment
+## Deploying The Infrastructure
 
-Ensure you have the following requirements met:
-- terraform installed
-- terragrunt installed
-- aws account
-- role with admin permissions to deploy the resources
-- user with cli access that can assume the role from previous step
-- domain and route 53 hosted zone
+### Requirements
 
-Before deploying the infrastructure populate the necessary information in the `infrastructure/_envcommon` directory.
+Before starting ensure you have the following tools installed:
+- terraform
+- terragrunt
+- aws cli
 
-```bash
-pushd infrastructure/_envcommon
-cp accounts-template.hcl accounts.hcl
-vim accounts.hcl
+Also ensure that you have the following aws resources:
+- sandbox account with deployment role
+- Route 53 public hosted zone
+- network account with a deployment role ( optional )
+- aws user with cli permissions and permissions to assume the deployment roles
 
-cp domain-template.hcl domain.hcl
-vim domain.hcl
+### Setting Up User Profiles
+
+Ensure you have base and sandbox admin profile in you aws configuration.
+Example of the `.aws/config` file is below.
+```txt
+[profile developer-base]
+region = eu-west-1
+output = json
+
+[profile developer-sandbox-admin]
+source_profile = developer-base
+role_arn = SANDBOX-DEPLOYMENT-ROLE-ARN
 ```
 
+Corresponding `.aws/credentials` file is below.
+```txt
+[developer-base]
+aws_access_key_id = ACCESS-KEY
+aws_secret_access_key = SECRET-ACCESS-KEY
+```
 
-By default resources are deployed in `eu-west-1` region.
-Run the following commands.
-It will take some time to deploy the resources.
+### Populating Common Values
+
+Create `accounts.hcl` and `domain.hcl` in `infrastructure/_envcommon` directory.
+```bash
+cd infrastructure/_envcommon
+cp accounts-template.hcl accounts.hcl
+cp domain-template.hcl domain.hcl
+```
+
+File `accounts.hcl` holds information about the network and sandbox account.
+Sandbox account holds the infrastructure and network account holds the root domains.
+If they are one and the same account just repeat the information in both sections.
+
+```hcl
+locals {
+
+  network_account = {
+    account_name = "Network"
+    account_id   = ""
+    assume_role  = ""
+  }
+
+  sandbox_account = {
+    account_name = "Sandbox"
+    account_id   = ""
+    assume_role  = ""
+  }
+}
+```
+
+File `domain.hcl` holds information about the root domain, located in network account, and about the subdomain for the cluster resources that is deployed in sandbox account.
+It also holds information about the notification email where issues about certificate renewals are sent.
+```hcl
+locals {
+  sub_domain_name          = "api.DOMAIN"
+  primary_zone_record_name = "api"
+  primary_zone_id          = ""
+  notification_email       = ""
+}
+```
+
+### Deploying Stacks
+
+Use `developer-base` profile to deploy the resources. It will take some time to deploy all the resources.
 ```bash
 pushd infrastructure/live
-terragrunt run-all apply
+AWS_PROFILE=developer-base terragrunt run-all apply
 popd
 ```
 
-
-Update your local `.kube/config` file.
-Make sure you assume the deployment role from the previous step before updating `.kube/config` file (see [here](#how-to-assume-the-role-and-update-local-kube-config-file))
+Next, update your local `.kube/config` file to be able to use `kubectl` command.
 ```bash
-aws eks update-kubeconfig --name demo --region eu-west-1
+aws eks update-kubeconfig --name demo --region eu-west-1 --profile developer-sandbox-admin
 ```
 
-Cluster additional resources and examples are deployed with ArgoCD with app of apps pattern.
-Root ArgoCD applications are defined in `argocd-apps` directory.
-
-To deploy extra resources and examples run.
+Test that you are able to access kubernetes cluster.
 ```bash
-kubectl apply -f argocd-apps
+kubectl get all -A
 ```
 
-To login to the ArgoCD portal, start by retrieve the initial admin password.
+### Deploying Examples
+
+Examples are in `examples` directory.
+Every example has an associated `README.md` that examples the example in detail.
+
+Examples can be deployed individually or all at once with ArgoCD.
+Deploy individual examples with
+```bash
+kubectl apply -k examples/<EXAMPLE>
+```
+
+#### Deploying Examples With ArgoCD
+
+Examples are deployed with app of apps pattern with root application located in `argocd-apps`.
+Applications for individual examples are located in `examples/apps`.
+
+Start by retrieving initial ArgoCD password.
 ```bash
 kubectl get secret -n argocd argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d
 ```
 
-Port forward to the ArgoCD instalation.
+Forward the port to the application and go to `localhost:8080`.
 ```bash
-# second shell
 kubectl port-forward -n argocd svc/argocd-server 8080:80
 ```
 
-Login to `localhost:8080` with username `admin` and password from previous step.
-It will take a couple of minutes to scale the worker nodes to handle all the examples.
+Deploy ArgoCD root applications.
+```bash
+kubectl apply -f argocd-apps
+```
+
+It will take a couple of minutes to scale the worker nodes to handle all of the examples.
+After some time you should see all gree in web portal.
+
+
+IMAGE
 
 
 
-## Network Stack
+## Network Stack ( HERE )
 
 Network is configured with two public subnets and two private subnets.
 Only one nat gateway is deployed in one of the public subnets to routes the internet traffic from both private subnets.
@@ -210,6 +291,7 @@ List of add-ons:
 - ebs csi driver
 - efs csi controller
 - load balancer controller
+- cert manager
 - nginx ingress controller
 - external dns controller
 - ArgoCD
@@ -427,6 +509,6 @@ kubectl delete -f argocd-apps
 
 # delete infrastructure
 pushd ./infrastructure/live
-terragrunt run-all destroy
+AWS_PROFILE=developer-base terragrunt run-all destroy
 popd
 ```
