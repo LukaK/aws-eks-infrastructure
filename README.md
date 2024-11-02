@@ -449,23 +449,38 @@ helm show values nginx/ingress-nginx --version VERSION
 
 #### ArgoCD
 
-HERE
+ArgoCD is one of the applications for deploying kubernetes resources.
+It watches the repository of manifests and synchronizes the state of the repository with the state of the cluster.
+That way repository is the single source of truth for your kubernetes cluster.
 
-ArgoCD is continuous deployment tool for kubernetes platform that ensures that the state of the cluster is aligned with the git repository.
+It is preferred way of deploying kubernetes resources in comparison to using `kubectl` from outside of the cluster.
+Since it is deployed in the kubernetes cluster it has more information on how the application is doing and can flag it as healthy or unhealthily.
 
-Examples and extra resources are deployed with ArgoCD and app of apps pattern.
-Root ArgoCD applications are in `argocd-apps`. Applications for services are in `services/apps` and applications for examples are in `examples/apps`.
+It is also improvement from security standpoint since it is a pulling model where you don't have to share credentials for kubernetes cluster with CICD platforms.
+You manage access by managing git repository access.
 
-ArgoCD is installed with helm and the latest version at the time of writing.
-To upgrade the version use the command below to find out the new version and update the corresponding module parametar.
 
+Examples can be deployed with application of applications pattern where one ArgoCD root application deploys all other applications which in turn deploy resources.
+That way you deploy only one root application manually and the rest is deployed automatically.
+
+<figure>
+  <img title="ArgoCD Web Portal" alt="ArgoCD Web Portal" width="100%" src="./assets/argocd-web-portal.png">
+  <figcaption><center>Fig 5. ArgoCD Web Portal</center></figcaption>
+</figure>
+
+ArgoCD root applications are in `argocd-apps` directory.
+Applications for the examples are in `examples/apps` directory.
+
+
+ArgoCD is installed as a helm chart with the latest version at the time of writing.
+To upgrade the version of the chart, use the command below to find out the new version and update the corresponding module parametar.
 ```bash
 helm repo add argo https://argoproj.github.io/argo-helm
 helm repo update
 helm search repo argo/argo-cd
 ```
 
-To see default chart values use the command below.
+To see default chart values that can be overridden, use the command below.
 ```bash
 helm show values argo/argo-cd --version VERSION
 ```
