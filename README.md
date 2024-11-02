@@ -3,7 +3,7 @@
 Project holds resources for deploying production ready aws eks cluster with pre installed plugins ( [see here](#cluster-add-ons-stack) ).
 Project is deployed as a terraform project with terragrunt to orchestrate the deployment and ArgoCD to deploy examples.
 
-Project is deployed in five interdependent stack which are explained below. These are [network](#network-stack), [eks cluster](#cluster-configuration), [eks add-ons](#cluster-add-ons-stack), [storage](#storage-stack) and [user access](#user-access-stack).
+Project is deployed in five interdependent stack which are explained below. These are [network](#network), [eks cluster](#eks-cluster), [eks add-ons](#cluster-add-ons-stack-here), [storage](#storage) and [user access](#user-access).
 
 ## Directory Structure
 
@@ -22,6 +22,7 @@ Directory is organized by account and availability zone with corresponding confi
 ├── README.md
 ├── argocd-apps                     # ArgoCD root applications
 ├── assets                          # Documentation assets
+├── docs                            # Documentation
 ├── examples                        # Examples
 │   ├── apps                        # ArgoCD applications
 │   ├── cert-manager
@@ -77,86 +78,9 @@ Also ensure that you have the following aws resources:
 - network account with a deployment role ( optional )
 - aws user with cli permissions and permissions to assume the deployment roles
 
-### Setting Up User Profiles
+### Deploy Infrastructure
 
-Ensure you have base and sandbox admin profile in you aws configuration.
-Example of the `.aws/config` file is below.
-```txt
-[profile developer-base]
-region = eu-west-1
-output = json
-
-[profile developer-sandbox-admin]
-source_profile = developer-base
-role_arn = SANDBOX-DEPLOYMENT-ROLE-ARN
-```
-
-Corresponding `.aws/credentials` file is below.
-```txt
-[developer-base]
-aws_access_key_id = ACCESS-KEY
-aws_secret_access_key = SECRET-ACCESS-KEY
-```
-
-### Populating Common Values
-
-Create `accounts.hcl` and `domain.hcl` in `infrastructure/_envcommon` directory.
-```bash
-cd infrastructure/_envcommon
-cp accounts-template.hcl accounts.hcl
-cp domain-template.hcl domain.hcl
-```
-
-File `accounts.hcl` holds information about the network and sandbox account.
-Sandbox account holds the infrastructure and network account holds the root domains.
-If they are one and the same account just repeat the information in both sections.
-
-```hcl
-locals {
-
-  network_account = {
-    account_name = "Network"
-    account_id   = ""
-    assume_role  = ""
-  }
-
-  sandbox_account = {
-    account_name = "Sandbox"
-    account_id   = ""
-    assume_role  = ""
-  }
-}
-```
-
-File `domain.hcl` holds information about the root domain, located in network account, and about the subdomain for the cluster resources that is deployed in sandbox account.
-It also holds information about the notification email where issues about certificate renewals are sent.
-```hcl
-locals {
-  sub_domain_name          = "api.DOMAIN"
-  primary_zone_record_name = "api"
-  primary_zone_id          = ""
-  notification_email       = ""
-}
-```
-
-### Deploying Stacks
-
-Use `developer-base` profile to deploy the resources. It will take some time to deploy all the resources.
-```bash
-pushd infrastructure/live
-AWS_PROFILE=developer-base terragrunt run-all apply
-popd
-```
-
-Next, update your local `.kube/config` file to be able to use `kubectl` command.
-```bash
-aws eks update-kubeconfig --name demo --region eu-west-1 --profile developer-sandbox-admin
-```
-
-Test that you are able to access kubernetes cluster.
-```bash
-kubectl get all -A
-```
+See the [deployment instructions](./docs/deployment-instructions.md)
 
 ### Deploying Examples
 
@@ -193,14 +117,36 @@ It will take a couple of minutes to scale the worker nodes to handle all of the 
 After some time you should see all gree in web portal.
 
 
-IMAGE
+<figure>
+  <img title="ArgoCD Web Portal" alt="ArgoCD Web Portal" width="100%" src="./assets/argocd-web-portal.png">
+  <figcaption><center>Fig 1. ArgoCD Web Portal</center></figcaption>
+</figure>
 
 
+## Stacks
 
-## Network Stack ( HERE )
+Infrastructure is deployed in five stacks with terragrunt acting as an orchestrator.
 
-Network is configured with two public subnets and two private subnets.
-Only one nat gateway is deployed in one of the public subnets to routes the internet traffic from both private subnets.
+Stacks:
+- [network](#network)
+- [eks cluster](#eks-cluster)
+- [storage](#storage)
+- [user access](#user-access)
+- eks add-ons
+
+
+### Network
+
+Network stack holds networking resources for the project.
+It is deployed from terraform module `infrastructure/module/network`.
+
+#### Vpc
+
+Two public subnets and two private subnets are deployed.
+Private subnets hold eks worker nodes and endpoints for efs storage.
+Public subnets hold load balancer for external access to the cluster.
+
+One nat gateway is deployed in one of the public subnets to ensure that worker nodes can pull images from ECR.
 
 **Network CIDR block:** 10.0.0.0/16
 
@@ -212,37 +158,60 @@ Only one nat gateway is deployed in one of the public subnets to routes the inte
 | **Public Subnet #1**    | 10.0.64.0/19                  |
 | **Public Subnet #2**    | 10.0.96.0/19                  |
 
+#### Dns
 
-Additionally new dns public hosted zone for the subdomain is deployed in the same account as the solution.
-In the root hosted zone, new NS record is created for `api` subdomain and traffic for that subdomain is routed to the new hosted zone.
+To allow dns resolution, new public hosted zone for the `api` subdomain ( by default ) is deployed into sandbox account.
+In root hosted zone, NS record is created for the subdomain, pointing to the new hosted zone.
 
-Root hosted zone details are provided in `infrastructure/_envcommon/{accounts.hcl,domain.hcl}` files.
-Root hosted zone can be in the same account or in some other aws account.
+<center>
+  <figure>
+    <img title="Dns Resolution" alt="Dns Resolution" width="60%" src="./assets/dns-resolution.png">
+    <figcaption><center>Fig 2. Dns Resolution</center></figcaption>
+  </figure>
+</center>
 
-## Cluster Configuration
 
-When deployed, aws creates control plane on aws account and network interfaces in public or private subnets depending on the access mode.
+### Eks Cluster
 
-Cluster is deployed with both public and private access allowing administration from the internet and private access from the worker nodes.
+Eks cluster stack holds bare bone eks cluster deployment.
+It is deployed from official aws module in terraform registry [link](https://registry.terraform.io/modules/terraform-aws-modules/eks/aws/latest).
+
+Cluster is deployed with both public and private access allowing both administration from the internet and private access from the worker nodes.
+
+Aws control plane is managed by aws in their vpc.
+In our subnets, elastic network interfaces are deployed, with proper permissions, to allow communication between worker nodes and control plane.
 
 Worker nodes are deployed as on demand managed node group with a pool of instance types.
-For more details about the cluster configuration see `infrastructure/live/env.hcl`.
+For more details about the cluster configuration see `infrastructure/_envcommon/cluster.hcl`.
 
 
-<p align="center">
-    <img title="Eks architecture" alt="Eks architecture" width="75%" src="./assets/eks-architecture.png">
-</p>
+<center>
+  <figure>
+    <img title="Eks Configuration" alt="Eks Configuration" width="100%" src="./assets/eks-architecture.png">
+    <figcaption><center>Fig 3. Eks Configuration</center></figcaption>
+  </figure>
+</center>
 
-## Storage Stack
+### Storage
 
-Contains resources defined in `storage` terraform module.
+Storage stack contains efs file system with necessary resources so that it can be mounted on the worker nodes.
+It is deployed from terraform module `infrastructure/module/storage`.
 
-It deploys efs file system and mount targets in private subnets so that worker nodes can mount the file system with efs csi driver.
-It also contains kubernetes storage class resource.
+Module deploys efs file system and mount targets in private subnets so that worker nodes can mount the file system with efs csi driver.
+It also deploys kubernetes storage class resource to the kubernetes cluster.
 
-## User Access Stack
 
-Contains resources is `users-iam` module and contains resources for granting permissions to users.
+<center>
+  <figure>
+    <img title="Efs Storage" alt="Efs Storage" width="100%" src="./assets/efs-storage.png">
+    <figcaption><center>Fig 4. Efs Storage</center></figcaption>
+  </figure>
+</center>
+
+### User Access
+
+User access stack contains resources needed to grand users admin and reader permissions to the eks cluster.
+It is deployed from terraform module `infrastructure/users-iam`.
 
 For admin users it create admin iam role and links it to admin cluster group using eks api.
 Admin iam group is created as well with permissions to assume the admin role, to easily add new users.
@@ -253,33 +222,9 @@ Viewer iam group is created as well with permission to assume the viewer role, t
 In eks, permissions for admin and viewer group is granted with cluster role and cluster role binding.
 They are defined in `services/users-iam` and are not deployed with the terraform resources.
 
-### How to grant admin/viewer permissions
+To see how to add admin/viewer users, see [link](./docs/how-to-add-admin-users.md)
 
-1. Create the user with command line access
-2. Assign the user to the `admin/viewer` iam group
-3. Send corresponding role arn to the user
-4. User assumes the role and updates its local `.kube/config` file
-
-### How to assume the role and update local kube config file
-
-Validate if you can assume the target role.
-```bash
-aws sts assume-role --role-arn ROLE-ARN --role-session-name SOME-NAME --profile BASE-PROFILE
-```
-
-Create new profile manually in `.aws/config` from your base user credentials.
-```text
-[profile PROFILE-NAME]
-source_profile = BASE-PROFILE
-role_arn = ROLE-ARN
-```
-
-Update local kube config file.
-```bash
-aws eks update-kubeconfig --name demo --region eu-west-1 --profile PROFILE-NAME
-```
-
-## Cluster Add-ons Stack
+### Cluster Add-ons ( HERE )
 
 Cluster is deployed with a set of controllers that are shown below.
 Controllers are deployed with helm charts or if supported as a cluster add on managed by aws.
@@ -296,7 +241,7 @@ List of add-ons:
 - external dns controller
 - ArgoCD
 
-### Pod identity
+#### Pod identity
 
 Pod identity is one of the options for granting access to pods to access aws resources.
 It is deployed as a `DaemonSet` to all the worker nodes.
@@ -310,7 +255,7 @@ Find out pod identity add-on version.
 aws eks describe-addon-versions --region eu-west-1 --addon-name eks-pod-identity-agent
 ```
 
-### Metric Server
+#### Metric Server
 
 Metric server is a controller that is used to determine cpu and memory utilization by nodes and pods.
 It is used by pod autoscaler for scaling pods horizontally or vertically.
@@ -331,7 +276,7 @@ To see default chart values use the command below.
 helm show values metric-server/metric-server --version VERSION
 ```
 
-### Cluster Autoscaler
+#### Cluster Autoscaler
 
 Controller used for scaling in/out managed worker nodes based on the cluster load.
 To use cluster autoscaler metric server needs to be installed.
@@ -355,7 +300,7 @@ To see default chart values use the command below.
 helm show values autoscaler/cluster-autoscaler --version VERSION
 ```
 
-### Ebs Csi Driver
+#### Ebs Csi Driver
 
 Controller responsible for providing the interface to aws ebs volumes.
 After controller is installed you are able to provision persistent volumes backed by ebs drives directly or dynamically with persistent volume claims.
@@ -371,7 +316,7 @@ To update the version find out the latest version of the add-on and update the m
 aws eks describe-addon-versions --region eu-west-1 --addon-name aws-ebs-csi-driver
 ```
 
-### Efs Csi Controller
+#### Efs Csi Controller
 
 Controller responsible for mounting highly available efs volumes to the pods.
 Like with ebs controller you are able to provision persistent volume objects directly or with persistent volume claims.
@@ -395,7 +340,7 @@ To see default chart values use the command below.
 helm show values efs-csi/aws-efs-csi-driver --version VERSION
 ```
 
-### Load Balancer Controller
+#### Load Balancer Controller
 
 Controller responsible for managing cloud resources for ingress and service objects.
 
@@ -428,7 +373,7 @@ To see default chart values use the command below.
 helm show values eks-charts/aws-load-balancer-controller --version VERSION
 ```
 
-### Nginx
+#### Nginx
 
 Nginx reverse proxy, deployed in the cluster, to route http/https traffic in the cluster.
 Serves as an alternative way of routing traffic where traffic is passed to the reverse proxy from the load balancers and routed within a cluster.
@@ -457,7 +402,7 @@ helm show values nginx/ingress-nginx --version VERSION
 ```
 
 
-### External DNS
+#### External DNS
 
 External DNS controller is responsible for managing route 53 dns records from kubernetes.
 
@@ -481,7 +426,7 @@ To see default chart values use the command below.
 helm show values external-dns/external-dns --version VERSION
 ```
 
-### ArgoCD
+#### ArgoCD
 
 ArgoCD is continuous deployment tool for kubernetes platform that ensures that the state of the cluster is aligned with the git repository.
 
