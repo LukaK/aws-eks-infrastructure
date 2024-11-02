@@ -3,7 +3,7 @@
 Project holds resources for deploying production ready aws eks cluster with pre installed plugins ( [see here](#cluster-add-ons-stack) ).
 Project is deployed as a terraform project with terragrunt to orchestrate the deployment and ArgoCD to deploy examples.
 
-Project is deployed in five interdependent stack which are explained below. These are [network](#network), [eks cluster](#eks-cluster), [eks add-ons](#cluster-add-ons-stack-here), [storage](#storage) and [user access](#user-access).
+Project is deployed in five interdependent stack which are explained below. These are [network](#network), [eks cluster](#eks-cluster), [eks add-ons](#cluster-add-ons), [storage](#storage) and [user access](#user-access).
 
 ## Directory Structure
 
@@ -79,7 +79,7 @@ Also ensure that you have the following aws resources:
 
 ### Deploy Infrastructure
 
-See the [deployment instructions](./docs/deployment-instructions.md)
+See the [deployment instructions](./docs/deployment-instructions.md).
 
 ### Deploying Examples
 
@@ -131,7 +131,7 @@ Stacks:
 - [eks cluster](#eks-cluster)
 - [storage](#storage)
 - [user access](#user-access)
-- eks add-ons
+- [cluster add-ons](#cluster-add-ons)
 
 
 ### Network
@@ -223,110 +223,110 @@ They are defined in `services/users-iam` and are not deployed with the terraform
 
 To see how to add admin/viewer users, see [link](./docs/how-to-add-admin-users.md)
 
-### Cluster Add-ons ( HERE )
+### Cluster Add-ons
 
-Cluster is deployed with a set of controllers that are shown below.
-Controllers are deployed with helm charts or if supported as a cluster add on managed by aws.
+Cluster add-ons stack contains set of controllers and pre-configured kubernetes resources, that are installed in eks cluster to provide additional functionality.
+It is deployed from terraform module `infrastructure/module/addons`.
 
 List of add-ons:
-- pod identity
-- metric server
-- cluster autoscaler
-- ebs csi driver
-- efs csi controller
-- load balancer controller
-- cert manager
-- nginx ingress controller
-- external dns controller
-- ArgoCD
+- [pod identity](#pod-identity)
+- [metric server](#metric-server)
+- [cluster autoscaler](#cluster-autoscaler)
+- [ebs csi driver](#ebs-csi-driver)
+- [efs csi controller](#efs-csi-controller)
+- [load balancer controller](#load-balancer-controller)
+- [cert manager](#cert-manager)
+- [nginx ingress controller](#nginx)
+- [external dns controller](#external-dns)
+- [ArgoCD](#argocd)
 
 #### Pod identity
 
-Pod identity is one of the options for granting access to pods to access aws resources.
-It is deployed as a `DaemonSet` to all the worker nodes.
-Before using, check if it is applicable for your case in aws documentation.
+Pod identity is a controller that provides a mechanism for kubernetes pods to access aws resources.
+It is one of the newer mechanisms that require less setup in comparison to IRSA.
+It is deployed as a `DaemonSet` kubernetes resources.
 
-Pod identity is deployed as a eks add-on with the latest version at the time of writing the project.
-To update the version find out the latest version of the add-on and update the module parametar value.
+Pod identity is installed as a eks add-on with the latest version at the time of writing the project.
+To update the version of the add-on, find out the latest version and update the module parametar value.
 
-Find out pod identity add-on version.
+To find out pod identity add-on version use the following command.
 ```bash
 aws eks describe-addon-versions --region eu-west-1 --addon-name eks-pod-identity-agent
 ```
 
 #### Metric Server
 
-Metric server is a controller that is used to determine cpu and memory utilization by nodes and pods.
-It is used by pod autoscaler for scaling pods horizontally or vertically.
+Metric server is a controller that is used to gather cpu and memory utilization by nodes and pods.
+Those metrics can be used afterwards for pod and cluster autoscaling events.
+For more advanced scaling use cases based on latency, traffic, saturation or errors, substitute metric server for prometheus or keda.
 
-For more advanced scaling use cases based on latency, traffic, saturation or errors substitute metric server for prometheus or keda.
-
-Metric server is installed with helm and the latest version at the time of writing.
-To upgrade the version of metric server use the command below to find out the new version and update the corresponding module parametar.
-
+Metric server is installed as a helm chart with the latest version at the time of writing.
+To upgrade the version of the chart, use the command below to find out the new version and update the corresponding module parametar.
 ```bash
 helm repo add metric-server https://kubernetes-sigs.github.io/metrics-server/
 helm repo update
 helm search repo metric-server/metric-server
 ```
 
-To see default chart values use the command below.
+To see default chart values that can be overridden, use the command below.
 ```bash
 helm show values metric-server/metric-server --version VERSION
 ```
 
 #### Cluster Autoscaler
 
-Controller used for scaling in/out managed worker nodes based on the cluster load.
-To use cluster autoscaler metric server needs to be installed.
+Cluster Autoscaler is a controller used for scaling managed worker nodes based on the cluster load.
+It is usually one of two options used for scaling the cluster, other one being Karpenter.
+To install Cluster Autoscaler, [metric server](#metric-server) needs to be installed beforehand.
 
-It uses aws autoscaling groups for scaling the worker nodes.
-When managed worker nodes are created you define minimum, maximum and desired size of the worker node group.
+Cluster Autoscaler is simpler of the two options and it uses aws autoscaling groups to scale the worker nodes.
+When managed worker nodes are created, you define node types, minimum, maximum and desired size of the worker node group.
 
-Examples on cluster autoscaler can be found [here](./examples/cluster-autoscaler).
+It is recommended to create separate worker node groups for different loads.
+If you are deploying stateful applications backed by [ebs](#ebs-csi-driver), it is recommended to create dedicated node group tied to a single az.
 
-Cluster autoscaler is installed with helm and the latest version at the time of writing.
-To upgrade the version use the command below to find out the new version and update the corresponding module parametar.
+Karpenter can be more cost efficient since it chooses extra worker nodes based on the load that is pending,
+but it can also fall short if you have a lot of `DaemonSet` objects deployed.
+Depending on your workload choose the best solution.
 
+Cluster Autoscaler is installed as a helm chart with the latest version at the time of writing.
+To upgrade the version of the chart, use the command below to find out the new version and update the corresponding module parametar.
 ```bash
 helm repo add autoscaler https://kubernetes.github.io/autoscaler
 helm repo update
 helm search repo autoscaler/cluster-autoscaler
 ```
 
-To see default chart values use the command below.
+To see default chart values that can be overridden, use the command below.
 ```bash
 helm show values autoscaler/cluster-autoscaler --version VERSION
 ```
 
 #### Ebs Csi Driver
 
-Controller responsible for providing the interface to aws ebs volumes.
-After controller is installed you are able to provision persistent volumes backed by ebs drives directly or dynamically with persistent volume claims.
+Ebs Csi Controller is a controller used for managing persistent volumes backed by ebs volumes.
+It is able to create, delete and resize volumes using persistent volume or persistent volume claim objects.
 
-Ebs backed persistent volumes support only `ReadWriteOnce` mode and are tied to one availability zone.
+Ebs backed persistent volumes support only `ReadWriteOnce` mode.
+They are also tied to a single availability zone, and if you are building stateful application backed by ebs, consider creating dedicating worker node group tied to a single az.
 
-Examples on ebs csi driver can be found [here](./examples/ebs-csi/).
-Files in `services/storage-classes` hold custom storage classes for the cluster.
-
-Ebs csi driver is deployed as a eks add-on with the latest version at the time of writing the project.
-To update the version find out the latest version of the add-on and update the module parametar value.
+Ebs csi driver is deployed as a eks add-on with the latest version at the time of writing.
+To update the version, find out the latest version of the add-on and update the module parametar value.
 ```bash
 aws eks describe-addon-versions --region eu-west-1 --addon-name aws-ebs-csi-driver
 ```
 
 #### Efs Csi Controller
 
-Controller responsible for mounting highly available efs volumes to the pods.
+Efs Csi Controller is responsible for mounting highly available efs volumes to the pods.
 Like with ebs controller you are able to provision persistent volume objects directly or with persistent volume claims.
+But unlike [ebs controller](#ebs-csi-driver), efs controller does not provision new efs drives.
+It only mounts existing one to the pods.
 
-Controller will not allocate new efs drives, it will only mount existing drives and make it available to the pod.
-Persistent volumes backed by efs support `ReadWriteMany` option.
+Efs backed storage is more expensive, but it supports `ReadWriteMany` option and is a good choice for stateless applications where pods need access to shared data.
 
-Examples on using efs csi controller can be found [here](./examples/efs/)
-
-Efs csi controller is installed with helm and the latest version at the time of writing.
-To upgrade the version use the command below to find out the new version and update the corresponding module parametar.
+Efs csi controller is installed as a helm chart with the latest version at the time of writing.
+To upgrade the version of the chart, use the command below to find out the new version and update the corresponding module parametar.
 
 ```bash
 helm repo add efs-csi https://kubernetes-sigs.github.io/aws-efs-csi-driver/
@@ -334,98 +334,122 @@ helm repo update
 helm search repo efs-csi/aws-efs-csi-driver
 ```
 
-To see default chart values use the command below.
+To see default chart values that can be overridden, use the command below.
 ```bash
 helm show values efs-csi/aws-efs-csi-driver --version VERSION
 ```
 
 #### Load Balancer Controller
 
-Controller responsible for managing cloud resources for ingress and service objects.
+Load Balancer Controller is responsible for managing aws load balancers as an entry point for kubernetes applications.
+It provisions application load balancers for ingress objects and network load balancers for services of type `LoadBalancer`.
 
-When service of type `LoadBalancer` is created, controller will provision network load balancer.
-For every service of type `LoadBalancer` one network load balancer is provisioned.
+For every service of type `LoadBalancer`, one network load balancer is provisioned.
+And for every ingress object separate application load balancer is provisioned.
 
-When ingress object is defined, controller will provision application load balancer.
-To keep number of application load balancers down, define ingress groups, where every ingress group maps to one application load balancer.
+That can become expensive over time.
+Ingress costs can be reduced with ingress groups, but can become hard to manage.
 
-Other option is to use nginx reverse proxy, deployed in the cluster, to route the traffic and network load balancers just as an entry point to the cluster ([see below](#nginx)).
+To reduce the cost usually dedicated reverse proxy, like [nginx](#nginx) is deployed in the cluster with network load balancer fronting the reverse proxy.
+That way you have one or usually two (public and private) network load balancers deployed on aws.
+Reverse proxy, deployed as a pod, has additional benefits of easier management with the same telemetry system that is used with other applications in the cluster.
 
-Examples on load balancer controller can be found [here](./examples/lbc/)
+To provision load balancer user [ingress annotations](https://kubernetes-sigs.github.io/aws-load-balancer-controller/v2.7/guide/ingress/annotations/) and [service annotations](https://kubernetes-sigs.github.io/aws-load-balancer-controller/v2.7/guide/service/annotations/).
 
-Annotations used with network load balancer can be found [here](https://kubernetes-sigs.github.io/aws-load-balancer-controller/v2.7/guide/service/annotations/).
-
-Annotations used with ingress can be found [here](https://kubernetes-sigs.github.io/aws-load-balancer-controller/v2.7/guide/ingress/annotations/).
-
-
-Load balancer controller is installed with helm and the latest version at the time of writing.
-To upgrade the version use the command below to find out the new version and update the corresponding module parametar.
-
+Load balancer controller is installed as a helm chart with the latest version at the time of writing.
+To upgrade the version of the chart, use the command below to find out the new version and update the corresponding module parametar.
 ```bash
 helm repo add eks-charts https://aws.github.io/eks-charts
 helm repo update
 helm search repo eks-charts/aws-load-balancer-controller
 ```
 
-To see default chart values use the command below.
+To see default chart values that can be overridden, use the command below.
 ```bash
 helm show values eks-charts/aws-load-balancer-controller --version VERSION
 ```
 
-#### Nginx
-
-Nginx reverse proxy, deployed in the cluster, to route http/https traffic in the cluster.
-Serves as an alternative way of routing traffic where traffic is passed to the reverse proxy from the load balancers and routed within a cluster.
-Better solution than routing with aws load balancers since it is easier to collect telemetry from nginx then from aws.
-
-When the nginx is deployed, network load balancer is created with the ip target group pointing to the nginx pods.
-By default 80 and 443 port are forwarded.
-Both public and private nginx are deployed for public and private network traffic respectfully.
-
-
-Examples on external nginx can be found [here](./examples/nginx/)
-
-
-Nginx ingress is installed with helm and the latest version at the time of writing.
-To upgrade the version use the command below to find out the new version and update the corresponding module parametar.
-
-```bash
-helm repo add nginx https://kubernetes.github.io/ingress-nginx
-helm repo update
-helm search repo nginx/ingress-nginx
-```
-
-To see default chart values use the command below.
-```bash
-helm show values nginx/ingress-nginx --version VERSION
-```
-
-
 #### External DNS
 
-External DNS controller is responsible for managing route 53 dns records from kubernetes.
+External DNS controller is a way to simplify dns management from kubernetes.
+It watches ingress and service objects and updates route 53 dns records.
 
-When the ingress resource is created dns records are automatically updated.
+When the ingress resource is created, dns records are automatically updated.
 When deploying service resources you can annotate them to create custom dns entries.
-External dns is deployed with `sync` policy allowing it to create/delete records on resource creation/deletion.
+External dns is deployed with `sync` policy allowing it to delete records as well when the ingress objects are deleted.
 
-Examples of external dns can be found [here](./examples/external-dns/)
-
-External dns is installed with helm and the latest version at the time of writing.
-To upgrade the version use the command below to find out the new version and update the corresponding module parametar.
-
+External dns is installed as a helm chart with the latest version at the time of writing.
+To upgrade the version of the chart, use the command below to find out the new version and update the corresponding module parametar.
 ```bash
 helm repo add external-dns https://kubernetes-sigs.github.io/external-dns
 helm repo update
 helm search repo external-dns/external-dns
 ```
 
-To see default chart values use the command below.
+To see default chart values that can be overridden, use the command below.
 ```bash
 helm show values external-dns/external-dns --version VERSION
 ```
 
+#### Cert-Manager
+
+Certificate Manager Controller is a way to automate provisioning and renewal of TLS certificates used by in cluster reverse proxy ([nginx](#nginx)).
+That way tls termination is done on [nginx](#nginx) inside of the cluster.
+
+Controller uses free [Let's Encrypt](https://letsencrypt.org/) certificates for encrypting the traffic.
+If you prefer to have tls termination on the aws load balancer level, use [aws certificate manager](https://aws.amazon.com/certificate-manager/) to provision the certificate and inject the certificate arn into your ingress configuration.
+
+Cluster issuer object that uses dns 01 challenges is deployed with cert-manager.
+Cluster issuer is a cluster level kubernetes object used to issue the certificates.
+
+When certificate is requested, dns record in a public hosted zone is created for [Let's Encrypt](https://letsencrypt.org/) to validate that we are the owner of the domain.
+After validation is completed, certificate is issued and challenge is deleted.
+
+Cert-manager is installed as a helm chart with the latest version at the time of writing.
+To upgrade the version of the chart, use the command below to find out the new version and update the corresponding module parametar.
+```bash
+helm repo add cert-manager https://charts.jetstack.io
+helm repo update
+helm search repo cert-manager/cert-manager
+```
+
+To see default chart values that can be overridden, use the command below.
+```bash
+helm show values cert-manager/cert-manager --version VERSION
+```
+
+#### Nginx
+
+Nginx is an application deployed in the cluster that acts as a reverse proxy.
+That is it routes incoming traffic to specific pods inside of the cluster.
+Serves as an alternative way of routing traffic where traffic is passed to the reverse proxy from the load balancers and routed within a cluster.
+
+Having reverse proxy in the cluster is usually cheaper since you have only one or two load balancer deployed on aws that act as an entry point for all applications.
+It is also easier to collect telemetry data since reverse proxy is pod in the cluster.
+
+Two nginx controllers are deployed, one for public and one for private traffic.
+Every nginx controller is fronted by layer 4 aws network load balancer which forwards the traffic to nginx pods.
+Two ingress class objects are created in the cluster, `external-nginx` and `internal-nginx`, for public and private ingress objects respectively.
+
+By default 80 and 443 port are forwarded.
+
+
+Nginx ingress is installed as a helm chart with the latest version at the time of writing.
+To upgrade the version of the chart, use the command below to find out the new version and update the corresponding module parametar.
+```bash
+helm repo add nginx https://kubernetes.github.io/ingress-nginx
+helm repo update
+helm search repo nginx/ingress-nginx
+```
+
+To see default chart values that can be overridden, use the command below.
+```bash
+helm show values nginx/ingress-nginx --version VERSION
+```
+
 #### ArgoCD
+
+HERE
 
 ArgoCD is continuous deployment tool for kubernetes platform that ensures that the state of the cluster is aligned with the git repository.
 
@@ -446,12 +470,20 @@ To see default chart values use the command below.
 helm show values argo/argo-cd --version VERSION
 ```
 
-## Cleanup
-```bash
-# delete services and examples
-kubectl delete -f argocd-apps
 
-# delete infrastructure
+## Cleanup
+If you deployed examples individually, make sure you delete the resources to release all of the aws resources.
+```bash
+kubectl delete -k examples/EXAMPLE
+```
+
+If you deployed examples with [ArgoCD](#argocd), make sure to delete root ArgoCD for the same reason.
+```bash
+kubectl delete -f argocd-apps
+```
+
+Delete the infrastructure.
+```bash
 pushd ./infrastructure/live
 AWS_PROFILE=developer-base terragrunt run-all destroy
 popd
