@@ -1,6 +1,6 @@
 ---
 global:
-  domain: argocd.api.itguyjournals.com
+  domain: "argocd.${hosted_zone_name}"
 
 configs:
   params:
@@ -9,12 +9,12 @@ configs:
 server:
   ingress:
     enabled: true
-    ingressClassName: external-nginx
+    ingressClassName: ${ingress_class_name}
     annotations:
       nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
       nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
-      cert-manager.io/cluster-issuer: dns-01-cluster-issuer
+      cert-manager.io/cluster-issuer: ${cluster_issuer_name}
     extraTls:
       - hosts:
-          - argocd.api.itguyjournals.com
-        secretName: argocd-api-itguyjournals-com
+          - "argocd.${hosted_zone_name}"
+        secretName: argocd-public-endpoint
