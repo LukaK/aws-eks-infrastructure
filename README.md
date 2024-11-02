@@ -1,6 +1,6 @@
 # Eks with Terraform and Terragrunt
 
-Project holds resources for deploying production ready aws eks cluster with pre installed plugins ( [see here](#cluster-add-ons-stack) ).
+Project holds resources for deploying production ready aws eks cluster with pre installed plugins ( [see here](#cluster-add-ons) ).
 Project is deployed as a terraform project with terragrunt to orchestrate the deployment and ArgoCD to deploy examples.
 
 Project is deployed in five interdependent stack which are explained below. These are [network](#network), [eks cluster](#eks-cluster), [eks add-ons](#cluster-add-ons), [storage](#storage) and [user access](#user-access).
@@ -235,9 +235,9 @@ List of add-ons:
 - [ebs csi driver](#ebs-csi-driver)
 - [efs csi controller](#efs-csi-controller)
 - [load balancer controller](#load-balancer-controller)
+- [external dns controller](#external-dns)
 - [cert manager](#cert-manager)
 - [nginx ingress controller](#nginx)
-- [external dns controller](#external-dns)
 - [ArgoCD](#argocd)
 
 #### Pod identity
