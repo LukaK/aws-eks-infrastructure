@@ -57,7 +57,8 @@ dependency "vpc" {
   config_path = "../network/"
 
   mock_outputs = {
-    hosted_zone_id = "123asdfa"
+    hosted_zone_id   = "123asdfa"
+    hosted_zone_name = "test hosted zone"
   }
 }
 
