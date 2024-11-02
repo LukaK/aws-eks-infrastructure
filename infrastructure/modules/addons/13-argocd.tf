@@ -9,5 +9,5 @@ resource "helm_release" "argocd" {
   create_namespace = true
   values           = [file("values/argocd.yaml")]
 
-  depends_on = [helm_release.aws_lbc]
+  depends_on = [helm_release.cert-manager, helm_release.external_dns, helm_release.external_nginx]
 }

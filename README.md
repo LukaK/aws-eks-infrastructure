@@ -102,10 +102,13 @@ Start by retrieving initial ArgoCD password.
 kubectl get secret -n argocd argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d
 ```
 
-Forward the port to the application and go to `localhost:8080`.
+ArgoCD is configured to be exposed securely over public [nginx ingress](#nginx).
+Make sure ArgoCD certificate is in `Ready` state.
 ```bash
-kubectl port-forward -n argocd svc/argocd-server 8080:80
+kubectl get certificate -n argocd --watch
 ```
+
+When it is ready go do `https://argocd.api.DOMAIN` and login with admin user and secret from previous step.
 
 Deploy ArgoCD root applications.
 ```bash
@@ -393,7 +396,7 @@ helm show values external-dns/external-dns --version VERSION
 
 #### Cert-Manager
 
-Certificate Manager Controller is a way to automate provisioning and renewal of TLS certificates used by in cluster reverse proxy ([nginx](#nginx)).
+Certificate Manager Controller is a way to automate provisioning and renewal of tls certificates used by in cluster reverse proxy ([nginx](#nginx)).
 That way tls termination is done on [nginx](#nginx) inside of the cluster.
 
 Controller uses free [Let's Encrypt](https://letsencrypt.org/) certificates for encrypting the traffic.
@@ -470,6 +473,9 @@ That way you deploy only one root application manually and the rest is deployed 
 
 ArgoCD root applications are in `argocd-apps` directory.
 Applications for the examples are in `examples/apps` directory.
+
+ArgoCD is exposed with public [nginx ingress](#nginx) and traffic is secured with [cert-manager](#cert-manager).
+ArgoCD web portal can be accessed on `https://argocd.api.DOMAIN`.
 
 
 ArgoCD is installed as a helm chart with the latest version at the time of writing.
