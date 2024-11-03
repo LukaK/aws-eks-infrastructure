@@ -58,7 +58,7 @@ Directory is organized by account and availability zone with corresponding confi
 └── services                        # Extra services
     ├── apps
     └── global
-        ├── storage-classes
+        └── storage-classes
 ```
 
 ## Deploying The Infrastructure
