@@ -1,0 +1,6 @@
+apiVersion: v2
+name: default-cluster-roles
+description: A Helm chart for Admin and Viewer cluster roles
+type: application
+version: 0.1.0
+appVersion: "0.1.0"
