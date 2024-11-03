@@ -9,7 +9,7 @@ Simple example demonstrating provisioning of the certificate from Let's Encrypt.
 
 Change tls configuration for the ingress to match your domain.
 
-ADD IMAGE
+<img title="Code update" alt="Code update" src="../../assets/cert-manager-simple-code-update.png">
 
 Wait for a couple of minutes until certificate is ready.
 
@@ -29,3 +29,6 @@ kubectl describe Order -n cert-manager-example
 # describe challenge that is created by the order
 kubectl describe Challenge -n cert-manager-example
 ```
+
+
+<img title="Certificate status" alt="Certificate Status" src="../../assets/cert-manager-certificate-status.png">
