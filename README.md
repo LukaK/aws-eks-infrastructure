@@ -147,6 +147,8 @@ After some time you should see all gree in web portal.
 
 <p align="center">
     <img title="ArgoCD Web Portal" alt="ArgoCD Web Portal" width="100%" src="./assets/argocd-web-portal.png">
+</p>
+<p align="center">
     <em>Fig 1. ArgoCD Web Portal</em>
 </p>
 
@@ -191,8 +193,11 @@ One nat gateway is deployed in one of the public subnets to ensure that worker n
 To allow dns resolution, new public hosted zone for the `api` subdomain ( by default ) is deployed into sandbox account.
 In root hosted zone, NS record is created for the subdomain, pointing to the new hosted zone.
 
+
 <p align="center">
     <img title="Dns Resolution" alt="Dns Resolution" width="60%" src="./assets/dns-resolution.png">
+</p>
+<p align="center">
     <em>Fig 2. Dns Resolution</em>
 </p>
 
@@ -213,6 +218,8 @@ For more details about the cluster configuration see `infrastructure/_envcommon/
 
 <p align="center">
     <img title="Eks Configuration" alt="Eks Configuration" width="100%" src="./assets/eks-architecture.png">
+</p>
+<p align="center">
     <em>Fig 3. Eks Configuration</em>
 </p>
 
@@ -488,6 +495,8 @@ That way you deploy only one root application manually and the rest is deployed 
 
 <p align="center">
     <img title="ArgoCD Web Portal" alt="ArgoCD Web Portal" width="100%" src="./assets/argocd-web-portal.png">
+</p>
+<p align="center">
     <em>Fig 5. ArgoCD Web Portal</em>
 </p>
 
