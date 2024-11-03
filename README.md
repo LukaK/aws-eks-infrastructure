@@ -93,10 +93,24 @@ kubectl get all -A
 ```
 
 
+## Examples
+
+Examples are defined in `examples` directory.
+
+List of examples:
+- [cert-manager](./examples/cert-manager/README.md)
+- [cluster autoscaler](./examples/cluster-autoscaler/README.md)
+- [ebs csi](./examples/ebs-csi/README.md)
+- [efs](./examples/efs/README.md)
+- [external dns](./examples/external-dns/README.md)
+- [horizontal pod autoscaler](./examples/hpa/README.md)
+- [nginx ingress](./examples/nginx/README.md)
+
+
 ### Deploying Examples
 
 Examples are in `examples` directory.
-Every example has an associated `README.md` that examples the example in detail.
+Every example has an associated `README.md` that examples the example.
 
 Examples can be deployed individually or all at once with ArgoCD.
 Deploy individual examples with

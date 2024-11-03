@@ -1,4 +1,15 @@
-# Cert manager
+# Cert Manager
+
+Examples with automatic certificate provisioning using cert-manager.
+For more informatio see [link](/README.md#cert-manager)
+
+## Simple
+
+Simple example demonstrating provisioning of the certificate from Let's Encrypt.
+
+Change tls configuration for the ingress to match your domain.
+
+ADD IMAGE
 
 Wait for a couple of minutes until certificate is ready.
 

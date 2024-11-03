@@ -21,3 +21,5 @@ kubectl run -i --tty load-generator --rm --image=busybox:1.28 --restart=Never --
 ```
 
 After the load reduces pods will scale down in 5-10 minutes.
+
+ADD IMAGE

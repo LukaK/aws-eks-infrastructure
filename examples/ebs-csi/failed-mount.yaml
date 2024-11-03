@@ -1,9 +1,15 @@
 ---
 apiVersion: v1
+kind: Namespace
+metadata:
+  name: ebs-example-failed-mount
+
+---
+apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: simple-pvc
-  namespace: ebs-examples
+  namespace: ebs-example-failed-mount
 spec:
   storageClassName: "gp2"
   accessModes:
@@ -16,17 +22,17 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: simple-deployment
-  namespace: ebs-examples
+  name: myapp
+  namespace: ebs-example-failed-mount
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
-      app: simple
+      app: myapp
   template:
     metadata:
       labels:
-        app: simple
+        app: myapp
     spec:
       containers:
         - name: nginx

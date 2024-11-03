@@ -1,9 +1,16 @@
 ---
 apiVersion: v1
+kind: Namespace
+metadata:
+  name: efs-example-simple-efs
+
+
+---
+apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: simple-pvc
-  namespace: efs-examples
+  namespace: efs-example-simple-efs
 spec:
   storageClassName: "efs"
   accessModes:
@@ -16,17 +23,17 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: simple-deployment
-  namespace: efs-examples
+  name: myapp
+  namespace: efs-example-simple-efs
 spec:
   replicas: 2
   selector:
     matchLabels:
-      app: simple
+      app: myapp
   template:
     metadata:
       labels:
-        app: simple
+        app: myapp
     spec:
       containers:
         - name: nginx
