@@ -2,10 +2,9 @@ scan:
   # Same as '--skip-dirs'
   # Default is empty
   skip-dirs:
-    - "**/.terragrunt-cache"
-    - "**/.terraform"
-    - "**/.git"
-    - "**infrastructure/modules/network/*vpc.tf"
+    - "**/.terraform/**/*"
+    - "**/.terragrunt-cache/**/*"
+    - "**/.git/**/*"
 
   # Default depends on subcommand
   scanners:
