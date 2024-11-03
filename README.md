@@ -59,7 +59,6 @@ Directory is organized by account and availability zone with corresponding confi
     ├── apps
     └── global
         ├── storage-classes
-        └── users-iam
 ```
 
 ## Deploying The Infrastructure
