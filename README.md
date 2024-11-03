@@ -146,10 +146,8 @@ After some time you should see all gree in web portal.
 
 
 <p align="center">
-  <figure>
     <img title="ArgoCD Web Portal" alt="ArgoCD Web Portal" width="100%" src="./assets/argocd-web-portal.png">
-    <figcaption><center>Fig 1. ArgoCD Web Portal</center></figcaption>
-  </figure>
+    <em>Fig 1. ArgoCD Web Portal</em>
 </p>
 
 
@@ -194,12 +192,8 @@ To allow dns resolution, new public hosted zone for the `api` subdomain ( by def
 In root hosted zone, NS record is created for the subdomain, pointing to the new hosted zone.
 
 <p align="center">
-  <center>
-    <figure>
-      <img title="Dns Resolution" alt="Dns Resolution" width="60%" src="./assets/dns-resolution.png">
-      <figcaption><center>Fig 2. Dns Resolution</center></figcaption>
-    </figure>
-  </center>
+    <img title="Dns Resolution" alt="Dns Resolution" width="60%" src="./assets/dns-resolution.png">
+    <em>Fig 2. Dns Resolution</em>
 </p>
 
 
@@ -218,12 +212,8 @@ For more details about the cluster configuration see `infrastructure/_envcommon/
 
 
 <p align="center">
-  <center>
-    <figure>
-      <img title="Eks Configuration" alt="Eks Configuration" width="100%" src="./assets/eks-architecture.png">
-      <figcaption><center>Fig 3. Eks Configuration</center></figcaption>
-    </figure>
-  </center>
+    <img title="Eks Configuration" alt="Eks Configuration" width="100%" src="./assets/eks-architecture.png">
+    <em>Fig 3. Eks Configuration</em>
 </p>
 
 ### Storage
@@ -236,12 +226,8 @@ It also deploys kubernetes storage class resource to the kubernetes cluster.
 
 
 <p align="center">
-  <center>
-    <figure>
-      <img title="Efs Storage" alt="Efs Storage" width="100%" src="./assets/efs-storage.png">
-      <figcaption><center>Fig 4. Efs Storage</center></figcaption>
-    </figure>
-  </center>
+    <img title="Efs Storage" alt="Efs Storage" width="100%" src="./assets/efs-storage.png">
+    <em>Fig 4. Efs Storage</em>
 </p>
 
 ### User Access
@@ -501,10 +487,8 @@ Examples can be deployed with application of applications pattern where one Argo
 That way you deploy only one root application manually and the rest is deployed automatically.
 
 <p align="center">
-  <figure>
     <img title="ArgoCD Web Portal" alt="ArgoCD Web Portal" width="100%" src="./assets/argocd-web-portal.png">
-    <figcaption><center>Fig 5. ArgoCD Web Portal</center></figcaption>
-  </figure>
+    <em>Fig 5. ArgoCD Web Portal</em>
 </p>
 
 ArgoCD root applications are in `argocd-apps` directory.
