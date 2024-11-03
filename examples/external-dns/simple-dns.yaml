@@ -37,7 +37,7 @@ metadata:
     service.beta.kubernetes.io/aws-load-balancer-type: external
     service.beta.kubernetes.io/aws-load-balancer-nlb-target-type: ip
     service.beta.kubernetes.io/aws-load-balancer-scheme: internet-facing
-    external-dns.alpha.kubernetes.io/hostname: simple-dns.itguyjournals.com
+    external-dns.alpha.kubernetes.io/hostname: simple-dns.api.itguyjournals.com
 spec:
   type: LoadBalancer
   ports:

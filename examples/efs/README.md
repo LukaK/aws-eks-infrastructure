@@ -15,4 +15,4 @@ Check that the pod is running and that volume is successfully attached.
 Resources are deployed in `efs-example-simple-efs` namespace.
 
 CHANGE IMAGE
-<img title="Public http access" alt="alb public http access" src="../../assets/efs-simple.png">
+<img title="Efs simple example" alt="Efs simple example" src="../../assets/efs-simple.png">
