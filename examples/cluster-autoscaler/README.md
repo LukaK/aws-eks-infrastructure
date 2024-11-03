@@ -14,7 +14,7 @@ After a couple of minutes new node will be added to your worker nodes and remain
 
 Resources are deployed to `cluster-autoscaller-simple-autoscaler` namespace.
 
-<img title="Public http access" alt="alb public http access" src="../../assets/cluster-autoscaler-1.png">
-<img title="Public http access" alt="alb public http access" src="../../assets/cluster-autoscaler-2.png">
+<img title="Cluster Autoscaler Scaling Up" alt="Cluster autoscaler scaling up" src="../../assets/cluster-autoscaler-simple-1.png">
+<img title="Cluster Autoscaler Green" alt="Cluster autoscaler green" src="../../assets/cluster-autoscaler-simple-2.png">
 
 Delete the resources and wait for 10 min for the scale down event to trigger, reducing number of worker nodes to their original size.
