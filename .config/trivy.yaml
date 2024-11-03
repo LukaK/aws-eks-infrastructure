@@ -2,9 +2,10 @@ scan:
   # Same as '--skip-dirs'
   # Default is empty
   skip-dirs:
-    - "**/.terraform/**/*"
-    - "**/.terragrunt-cache/**/*"
-    - "**/.git/**/*"
+    - "**/.terraform"
+    - "**/.terragrunt-cache"
+    - "**/.git"
+
 
   # Default depends on subcommand
   scanners:
@@ -22,3 +23,7 @@ ignorefile: .config/trivyignore
 
 vulnerability:
   ignore-unfixed: true
+
+misconfiguration:
+  terraform:
+    exclude-downloaded-modules: true
