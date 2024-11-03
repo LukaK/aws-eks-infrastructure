@@ -5,7 +5,7 @@ metadata:
   name: dns-01-myapp
   namespace: cert-manager-example
   annotations:
-    cert-manager.io/cluster-issuer: dns-01-cluster-issuer
+    cert-manager.io/cluster-issuer: dns-cluster-issuer
 spec:
   ingressClassName: external-nginx
   tls:

@@ -1,0 +1,8 @@
+rbac:
+  serviceAccount:
+    name: "${service_account_name}"
+
+autoDiscovery:
+  clusterName: "${cluster_name}"
+
+awsRegion: ${aws_region}

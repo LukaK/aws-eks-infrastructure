@@ -1,0 +1,5 @@
+aws_region: "${aws_region}"
+email: "${email}"
+dnsZone: "${dns_zone}"
+hostedZoneId: "${hosted_zone_id}"
+clusterIssuerName: "${cluster_issuer_name}"

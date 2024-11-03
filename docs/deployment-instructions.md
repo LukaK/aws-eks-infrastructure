@@ -75,15 +75,3 @@ pushd infrastructure/live
 AWS_PROFILE=developer-base terragrunt run-all apply
 popd
 ```
-
-Next, update your local `.kube/config` file to be able to use `kubectl` command.
-```bash
-aws eks update-kubeconfig --name demo --region eu-west-1 --profile developer-sandbox-admin
-```
-
-Test that you are able to access kubernetes cluster.
-```bash
-kubectl get all -A
-```
-
-

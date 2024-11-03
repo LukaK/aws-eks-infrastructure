@@ -81,6 +81,18 @@ Also ensure that you have the following aws resources:
 
 See the [deployment instructions](./docs/deployment-instructions.md).
 
+### Get Permissions To Access The Cluster
+
+Update your local `.kube/config` file to be able to use `kubectl` command.
+```bash
+aws eks update-kubeconfig --name demo --region eu-west-1 --profile developer-sandbox-admin
+```
+Test that you are able to access kubernetes cluster.
+```bash
+kubectl get all -A
+```
+
+
 ### Deploying Examples
 
 Examples are in `examples` directory.

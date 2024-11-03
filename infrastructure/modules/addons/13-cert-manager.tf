@@ -78,16 +78,11 @@ resource "helm_release" "cert-manager" {
   create_namespace = true
   version          = var.cert_manager_chart_version
 
-
-  set {
-    name  = "serviceAccount.name"
-    value = "cert-manager-sa"
-  }
-
-  set {
-    name  = "installCRDs"
-    value = "true"
-  }
+  values = [
+    templatefile("values/cert-manager.yaml", {
+      service_account_name = "cert-manager-sa"
+    })
+  ]
 
   depends_on = [helm_release.external_nginx, helm_release.external_dns]
 }
@@ -96,45 +91,20 @@ resource "helm_release" "cert-manager" {
 
 resource "helm_release" "cluster_issuers" {
   name             = "cluster-issuers"
-  chart            = "./charts/cert-manager-cluster-issuers"
+  chart            = "./charts/cert-manager-cluster-issuer"
   namespace        = "cert-manager"
   create_namespace = true
 
 
-  set {
-    name  = "region"
-    value = var.region
-  }
-
-  set {
-    name  = "email"
-    value = var.cert_manager_notification_email
-  }
-
-  set {
-    name  = "dnsZone"
-    value = var.hosted_zone_name
-  }
-
-  set {
-    name  = "hostedZoneId"
-    value = var.hosted_zone_id
-  }
-
-  set {
-    name  = "ingressClassName"
-    value = "external-nginx"
-  }
-
-  set {
-    name  = "httpClusterIssuerName"
-    value = "http-01-cluster-issuer"
-  }
-
-  set {
-    name  = "dnsClusterIssuerName"
-    value = "dns-01-cluster-issuer"
-  }
+  values = [
+    templatefile("values/cert-manager-cluster-issuer.yaml", {
+      aws_region          = var.region
+      email               = var.cert_manager_notification_email
+      dns_zone            = var.hosted_zone_name
+      hosted_zone_id      = var.hosted_zone_id
+      cluster_issuer_name = local.cluster_issuer_name
+    })
+  ]
 
   depends_on = [helm_release.cert-manager]
 }

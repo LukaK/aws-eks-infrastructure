@@ -1,12 +1,12 @@
 ---
 controller:
-  electionID: internal-ingress-controller-leader
-  ingressClass: internal-nginx  # default: nginx
+  electionID: "${election_id}"
+  ingressClass: "${ingress_class}"
   ingressClassResource:
-    name: internal-nginx  # default: nginx
+    name: "${ingress_class}"
     enabled: true
     default: false
-    controllerValue: "k8s.io/internal-ingress-nginx"  # default: k8s.io/ingress-nginx
+    controllerValue: "${controller_value}"
   service:
     annotations:
       service.beta.kubernetes.io/aws-load-balancer-type: external

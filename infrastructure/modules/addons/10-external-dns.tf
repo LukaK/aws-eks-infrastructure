@@ -69,15 +69,12 @@ resource "helm_release" "external_dns" {
   namespace  = "kube-system"
   version    = var.external_dns_chart_version
 
-  set {
-    name  = "serviceAccount.name"
-    value = "external-dns-sa"
-  }
 
-  set {
-    name  = "policy"
-    value = "sync"
-  }
+  values = [
+    templatefile("values/external-dns.yaml", {
+      service_account_name = "external-dns-sa"
+    })
+  ]
 
   depends_on = [helm_release.aws_lbc, aws_iam_role_policy_attachment.external_dns]
 }

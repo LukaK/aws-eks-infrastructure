@@ -1,0 +1,4 @@
+serviceAccount:
+  name: "${service_account_name}"
+
+policy: "sync"

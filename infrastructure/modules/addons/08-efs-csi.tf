@@ -41,10 +41,11 @@ resource "helm_release" "efs_csi_driver" {
   namespace  = "kube-system"
   version    = var.efs_csi_chart_version
 
-  set {
-    name  = "controller.serviceAccount.name"
-    value = "efs-csi-controller-sa"
-  }
+  values = [
+    templatefile("values/efs-csi-driver.yaml", {
+      service_account_name = "efs-csi-controller-sa"
+    })
+  ]
 
   depends_on = [helm_release.cluster_autoscaler, aws_iam_role_policy_attachment.efs_csi_driver]
 }

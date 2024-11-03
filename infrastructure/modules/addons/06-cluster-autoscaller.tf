@@ -76,20 +76,14 @@ resource "helm_release" "cluster_autoscaler" {
   namespace  = "kube-system"
   version    = var.cluster_autoscaler_chart_version
 
-  set {
-    name  = "rbac.serviceAccount.name"
-    value = "cluster-autoscaler"
-  }
 
-  set {
-    name  = "autoDiscovery.clusterName"
-    value = var.cluster_name
-  }
-
-  set {
-    name  = "awsRegion"
-    value = var.region
-  }
+  values = [
+    templatefile("values/cluster-autoscaler.yaml", {
+      service_account_name = "cluster-autoscaler"
+      cluster_name         = var.cluster_name
+      aws_region           = var.region
+    })
+  ]
 
   depends_on = [helm_release.metric_server, aws_iam_role_policy_attachment.cluster_autoscaler]
 }
