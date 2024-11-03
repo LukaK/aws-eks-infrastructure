@@ -9,17 +9,17 @@ If you use ArgoCD be sure to not refine number of replicas in the manifests to a
 Prepare shells for monitoring.
 ```bash
 # shell 1: watch number of pods
-kubectl get deployment -n hpa-example --watch
+kubectl get deployment -n hpa-example-simple-hpa --watch
 
 # shell 2; watch horizontal pod autoscaler metrics
-kubectl get hpa -n hpa-example --watch
+kubectl get hpa -n hpa-example-simple-hpa --watch
 ```
 
 To trigger the auto scaling event execute the following command.
 ```bash
-kubectl run -i --tty load-generator --rm --image=busybox:1.28 --restart=Never -- /bin/sh -c "while sleep 0.01; do wget -q -O- http://myapp.hpa-example.svc.cluster.local; done"
+kubectl run -i --tty load-generator --rm --image=busybox:1.28 --restart=Never -- /bin/sh -c "while sleep 0.01; do wget -q -O- http://myapp.hpa-example-simple-hpa.svc.cluster.local; done"
 ```
 
 After the load reduces pods will scale down in 5-10 minutes.
 
-ADD IMAGE
+<img title="Horizonal pod autoscaler example" alt="Horizonal pod autoscaler example" src="../../assets/hpa-simple.png">
