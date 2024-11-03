@@ -5,7 +5,7 @@ scan:
     - "**/.terragrunt-cache"
     - "**/.terraform"
     - "**/.git"
-    - "**infrastructure/modules/network/vpc.tf"
+    - "**infrastructure/modules/network/*vpc.tf"
 
   # Default depends on subcommand
   scanners:
