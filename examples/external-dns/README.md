@@ -15,4 +15,10 @@ Resources are deployed in `external-dns-example-simple-dns` namespace.
 
 Check that you can resolve dns entry.
 
-<img title="External dns simple example" alt="External dns simple example" src="../../assets/efs-simple.png">
+<p align="center">
+    <img title="External dns simple example" alt="External dns simple example" src="../../assets/efs-simple.png">
+</p>
+<p align="center">
+    <em>Fig. External dns, simple example</em>
+</p>
+

@@ -12,4 +12,9 @@ Resources are deployed to `ebs-example-simple-ebs` namespace.
 
 Check that the pod is running and that volume is successfully attached.
 
-<img title="Simple ebs example" alt="Simple ebs example" src="../../assets/ebs-simple.png">
+<p align="center">
+    <img title="Simple ebs example" alt="Simple ebs example" src="../../assets/ebs-simple.png">
+</p>
+<p align="center">
+    <em>Fig. Ebs csi, simple example</em>
+</p>

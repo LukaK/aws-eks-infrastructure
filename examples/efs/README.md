@@ -14,5 +14,10 @@ Efs volumes support `ReadWriteMany` and can be mounted on multiple pods at the s
 Check that the pod is running and that volume is successfully attached.
 Resources are deployed in `efs-example-simple-efs` namespace.
 
-CHANGE IMAGE
-<img title="Efs simple example" alt="Efs simple example" src="../../assets/efs-simple.png">
+<p align="center">
+    <img title="Efs simple example" alt="Efs simple example" src="../../assets/efs-simple.png">
+</p>
+<p align="center">
+    <em>Fig. Efs csi, simple example</em>
+</p>
+

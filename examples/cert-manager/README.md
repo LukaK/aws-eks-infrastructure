@@ -31,4 +31,10 @@ kubectl describe Challenge -n cert-manager-example
 ```
 
 
-<img title="Certificate status" alt="Certificate Status" src="../../assets/cert-manager-certificate-status.png">
+<p align="center">
+    <img title="Certificate status" alt="Certificate Status" src="../../assets/cert-manager-certificate-status.png">
+</p>
+<p align="center">
+    <em>Fig. Cert-manager simple example</em>
+</p>
+

@@ -22,4 +22,11 @@ kubectl run -i --tty load-generator --rm --image=busybox:1.28 --restart=Never --
 
 After the load reduces pods will scale down in 5-10 minutes.
 
-<img title="Horizonal pod autoscaler example" alt="Horizonal pod autoscaler example" src="../../assets/hpa-simple.png">
+
+<p align="center">
+    <img title="Horizonal pod autoscaler example" alt="Horizonal pod autoscaler example" src="../../assets/hpa-simple.png">
+</p>
+<p align="center">
+    <em>Fig. Horizontal pod autoscaler, simple example</em>
+</p>
+
