@@ -145,10 +145,12 @@ It will take a couple of minutes to scale the worker nodes to handle all of the 
 After some time you should see all gree in web portal.
 
 
-<figure>
-  <img title="ArgoCD Web Portal" alt="ArgoCD Web Portal" width="100%" src="./assets/argocd-web-portal.png">
-  <figcaption><center>Fig 1. ArgoCD Web Portal</center></figcaption>
-</figure>
+<p align="center">
+  <figure>
+    <img title="ArgoCD Web Portal" alt="ArgoCD Web Portal" width="100%" src="./assets/argocd-web-portal.png">
+    <figcaption><center>Fig 1. ArgoCD Web Portal</center></figcaption>
+  </figure>
+</p>
 
 
 ## Stacks
@@ -191,12 +193,14 @@ One nat gateway is deployed in one of the public subnets to ensure that worker n
 To allow dns resolution, new public hosted zone for the `api` subdomain ( by default ) is deployed into sandbox account.
 In root hosted zone, NS record is created for the subdomain, pointing to the new hosted zone.
 
-<center>
-  <figure>
-    <img title="Dns Resolution" alt="Dns Resolution" width="60%" src="./assets/dns-resolution.png">
-    <figcaption><center>Fig 2. Dns Resolution</center></figcaption>
-  </figure>
-</center>
+<p align="center">
+  <center>
+    <figure>
+      <img title="Dns Resolution" alt="Dns Resolution" width="60%" src="./assets/dns-resolution.png">
+      <figcaption><center>Fig 2. Dns Resolution</center></figcaption>
+    </figure>
+  </center>
+</p>
 
 
 ### Eks Cluster
@@ -213,12 +217,14 @@ Worker nodes are deployed as on demand managed node group with a pool of instanc
 For more details about the cluster configuration see `infrastructure/_envcommon/cluster.hcl`.
 
 
-<center>
-  <figure>
-    <img title="Eks Configuration" alt="Eks Configuration" width="100%" src="./assets/eks-architecture.png">
-    <figcaption><center>Fig 3. Eks Configuration</center></figcaption>
-  </figure>
-</center>
+<p align="center">
+  <center>
+    <figure>
+      <img title="Eks Configuration" alt="Eks Configuration" width="100%" src="./assets/eks-architecture.png">
+      <figcaption><center>Fig 3. Eks Configuration</center></figcaption>
+    </figure>
+  </center>
+</p>
 
 ### Storage
 
@@ -229,12 +235,14 @@ Module deploys efs file system and mount targets in private subnets so that work
 It also deploys kubernetes storage class resource to the kubernetes cluster.
 
 
-<center>
-  <figure>
-    <img title="Efs Storage" alt="Efs Storage" width="100%" src="./assets/efs-storage.png">
-    <figcaption><center>Fig 4. Efs Storage</center></figcaption>
-  </figure>
-</center>
+<p align="center">
+  <center>
+    <figure>
+      <img title="Efs Storage" alt="Efs Storage" width="100%" src="./assets/efs-storage.png">
+      <figcaption><center>Fig 4. Efs Storage</center></figcaption>
+    </figure>
+  </center>
+</p>
 
 ### User Access
 
@@ -492,10 +500,12 @@ You manage access by managing git repository access.
 Examples can be deployed with application of applications pattern where one ArgoCD root application deploys all other applications which in turn deploy resources.
 That way you deploy only one root application manually and the rest is deployed automatically.
 
-<figure>
-  <img title="ArgoCD Web Portal" alt="ArgoCD Web Portal" width="100%" src="./assets/argocd-web-portal.png">
-  <figcaption><center>Fig 5. ArgoCD Web Portal</center></figcaption>
-</figure>
+<p align="center">
+  <figure>
+    <img title="ArgoCD Web Portal" alt="ArgoCD Web Portal" width="100%" src="./assets/argocd-web-portal.png">
+    <figcaption><center>Fig 5. ArgoCD Web Portal</center></figcaption>
+  </figure>
+</p>
 
 ArgoCD root applications are in `argocd-apps` directory.
 Applications for the examples are in `examples/apps` directory.
