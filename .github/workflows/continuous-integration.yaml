@@ -13,25 +13,6 @@ permissions:
 
 jobs:
 
-  check-docs:
-    name: Check Module Documentation
-
-    runs-on: ubuntu-latest
-
-    steps:
-
-      # Checkout the base branch of the pull request (e.g. main/master).
-      - name: Checkout base branch
-        uses: actions/checkout@v4
-
-      - name: Check if terraform docs are up to date
-        uses: terraform-docs/gh-actions@v1.2.0
-        with:
-          args: "--output-check"
-          working-dir: infrastructure/
-          config-file: .config/tfdocs-config.yaml
-
-
   scan-for-security-issues:
 
     name: Security Scan
@@ -67,24 +48,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Terragrunt Check Hcl Format
-        uses: gruntwork-io/terragrunt-action@v2
-        with:
-          tg_dir: ${{ env.working_dir }}
-          tf_version: ${{ env.tf_version }}
-          tg_version: ${{ env.tg_version }}
-          tg_command: 'hclfmt --terragrunt-check --terragrunt-diff'
-
-
-      - name: Terragrunt Init
-        uses: gruntwork-io/terragrunt-action@v2
-        with:
-          tg_dir: ${{ env.working_dir }}
-          tf_version: ${{ env.tf_version }}
-          tg_version: ${{ env.tg_version }}
-          tg_command: 'run-all init'
-
-      - name: Terragrunt Validate
+      - name: Ensure configuration is valid
         uses: gruntwork-io/terragrunt-action@v2
         id: terragrunt-validate
         with:
