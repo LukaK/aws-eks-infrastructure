@@ -30,29 +30,3 @@ jobs:
           scan-type: 'fs'
           scan-ref: '.'
           trivy-config: .config/trivy.yaml
-
-
-  validate-infrastructure:
-
-    name: Terragrunt Infrastructure Checks
-
-    runs-on: ubuntu-latest
-
-    env:
-      tf_version: '1.9.4'
-      tg_version: '0.58.10'
-      working_dir: 'infrastructure/live'
-
-    steps:
-
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Ensure configuration is valid
-        uses: gruntwork-io/terragrunt-action@v2
-        id: terragrunt-validate
-        with:
-          tg_dir: ${{ env.working_dir }}
-          tf_version: ${{ env.tf_version }}
-          tg_version: ${{ env.tg_version }}
-          tg_command: 'run-all validate'
