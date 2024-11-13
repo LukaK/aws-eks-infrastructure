@@ -49,7 +49,9 @@ dependency "eks" {
   config_path = "../eks/"
 
   mock_outputs = {
-    cluster_name = "demo"
+    cluster_name      = "demo"
+    oidc_provider_arn = "test"
+    oidc_provider_url = "test"
   }
 }
 
@@ -69,4 +71,6 @@ inputs = {
   hosted_zone_id                  = dependency.vpc.outputs.hosted_zone_id
   hosted_zone_name                = dependency.vpc.outputs.hosted_zone_name
   cert_manager_notification_email = include.domain.locals.notification_email
+  openid_connect_arn              = dependency.eks.outputs.oidc_provider_arn
+  openid_connect_url              = dependency.eks.outputs.oidc_provider
 }

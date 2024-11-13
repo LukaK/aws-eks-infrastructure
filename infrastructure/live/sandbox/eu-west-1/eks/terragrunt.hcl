@@ -37,8 +37,8 @@ inputs = {
   cluster_endpoint_public_access  = true
   cluster_endpoint_private_access = true
 
-  # don't create oidc provider for the cluster, use pod identities
-  enable_irsa = false
+  # create openId connect provider for secrets manager plugin
+  enable_irsa = true
 
   # network information with subnets where nodes will be created
   vpc_id     = dependency.vpc.outputs.vpc_id

@@ -3,6 +3,16 @@ variable "cluster_name" {
   description = "Eks cluster name"
 }
 
+variable "openid_connect_arn" {
+  type        = string
+  description = "OpenID connect arn for the cluster"
+}
+
+variable "openid_connect_url" {
+  type        = string
+  description = "OpenID connect url for the cluster"
+}
+
 variable "region" {
   type        = string
   description = "Aws region"
@@ -67,6 +77,18 @@ variable "external_dns_chart_version" {
   type        = string
   description = "Helm chart version for external dns"
   default     = "1.15.0"
+}
+
+variable "secrets_store_chart_version" {
+  type        = string
+  description = "Helm chart version for secrets store"
+  default     = "1.4.6"
+}
+
+variable "secrets_store_aws_chart_version" {
+  type        = string
+  description = "Helm chart version for secrets store aws provider"
+  default     = "0.3.8"
 }
 
 variable "cert_manager_chart_version" {
