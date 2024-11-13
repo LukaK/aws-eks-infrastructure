@@ -79,7 +79,7 @@ No modules.
 | <a name="input_openid_connect_url"></a> [openid\_connect\_url](#input\_openid\_connect\_url) | OpenID connect url for the cluster | `string` | n/a | yes |
 | <a name="input_pod_identity_version"></a> [pod\_identity\_version](#input\_pod\_identity\_version) | Version of the pod identity agent | `string` | `"v1.3.2-eksbuild.2"` | no |
 | <a name="input_region"></a> [region](#input\_region) | Aws region | `string` | `"eu-west-1"` | no |
-| <a name="input_secrets_store_aws_chart_version"></a> [secrets\_store\_aws\_chart\_version](#input\_secrets\_store\_aws\_chart\_version) | Helm chart version for secrets store aws provider | `string` | `"0.3.8"` | no |
+| <a name="input_secrets_store_aws_chart_version"></a> [secrets\_store\_aws\_chart\_version](#input\_secrets\_store\_aws\_chart\_version) | Helm chart version for secrets store aws provider | `string` | `"0.3.10"` | no |
 | <a name="input_secrets_store_chart_version"></a> [secrets\_store\_chart\_version](#input\_secrets\_store\_chart\_version) | Helm chart version for secrets store | `string` | `"1.4.6"` | no |
 | <a name="input_tags"></a> [tags](#input\_tags) | n/a | `map(string)` | `{}` | no |
 

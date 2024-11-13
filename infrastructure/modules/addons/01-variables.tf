@@ -88,7 +88,7 @@ variable "secrets_store_chart_version" {
 variable "secrets_store_aws_chart_version" {
   type        = string
   description = "Helm chart version for secrets store aws provider"
-  default     = "0.3.8"
+  default     = "0.3.10"
 }
 
 variable "cert_manager_chart_version" {

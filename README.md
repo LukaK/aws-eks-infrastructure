@@ -32,7 +32,8 @@ Directory is organized by account and availability zone with corresponding confi
 │   ├── external-dns
 │   ├── hpa
 │   ├── lbc
-│   └── nginx
+│   ├── nginx
+│   └── secrets-store
 ├── infrastructure                  # Infrastructure
 │   ├── _envcommon                  # Common variables shared between stacks
 │   │   ├── accounts.hcl
@@ -263,6 +264,7 @@ List of add-ons:
 - [cluster autoscaler](#cluster-autoscaler)
 - [ebs csi driver](#ebs-csi-driver)
 - [efs csi controller](#efs-csi-controller)
+- [secrets store](#secrets-store)
 - [load balancer controller](#load-balancer-controller)
 - [external dns controller](#external-dns)
 - [cert manager](#cert-manager)
@@ -367,6 +369,48 @@ To see default chart values that can be overridden, use the command below.
 ```bash
 helm show values efs-csi/aws-efs-csi-driver --version VERSION
 ```
+
+#### Secrets Store
+
+Secrets store is responsible for retrieving secrets from secrets manager or parameter store and making them accessible to pods.
+It can make them accessible as files or as environment variables.
+
+Secrets store add-on does not work with pod identities so with the add-on extra permissive role is deployed.
+Role can be assumed by any service account and has access to all secrets in secrets manager.
+Change it for production workloads.
+
+Example for secrets store need manual configuration and are not deployed with ArgoCD applications.
+
+
+Secrets store controller and aws provider add-on are installed as a helm chart with the latest version at the time of writing.
+To upgrade the version of secrets store controller chart, use the command below to find out the new version and update the corresponding module parametar.
+
+```bash
+helm repo add secrets-store https://kubernetes-sigs.github.io/secrets-store-csi-driver/charts
+helm repo update
+helm search repo secrets-store/secrets-store-csi-driver
+```
+
+To see default chart values that can be overridden, use the command below.
+```bash
+helm show values secrets-store/secrets-store-csi-driver --version VERSION
+```
+
+To upgrade the version of secrets store aws provider chart, use the command below to find out the new version and update the corresponding module parametar.
+
+```bash
+helm repo add secrets-store-aws https://aws.github.io/secrets-store-csi-driver-provider-aws
+helm repo update
+helm search repo secrets-store-aws/secrets-store-csi-driver-provider-aws
+```
+
+To see default chart values that can be overridden, use the command below.
+```bash
+helm show values secrets-store-aws/secrets-store-csi-driver-provider-aws
+--version VERSION
+```
+
+
 
 #### Load Balancer Controller
 
@@ -518,7 +562,6 @@ To see default chart values that can be overridden, use the command below.
 ```bash
 helm show values argo/argo-cd --version VERSION
 ```
-
 
 ## Cleanup
 If you deployed examples individually, make sure you delete the resources to release all of the aws resources.
