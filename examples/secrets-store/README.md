@@ -12,7 +12,7 @@ Basic example deploys everything in `secrets-manager-example-basic-example` name
 
 ### Setup
 
-1. Create a secrets in aws account
+1. Create a secrets in aws account with keys `username` and `password`
 2. Add secret in `basic-example.yaml` file under `SECRET-NAME`
 3. Retrieve output of add-on stack `application_secrets_role_arn`
 4. Add role arn to `basic-example.yaml` file under `ROLE-ARN`
