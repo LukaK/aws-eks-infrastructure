@@ -1,0 +1,31 @@
+---
+grafana:
+
+  ingress:
+    enabled: true
+    ingressClassName: ${ingress_class_name}
+    annotations:
+      nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+      nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
+      cert-manager.io/cluster-issuer: ${cluster_issuer_name}
+    hosts:
+      - "grafana.${hosted_zone_name}"
+    tls:
+      - secretName: grafana-public-endpoint
+        hosts:
+        - grafana.${hosted_zone_name}
+
+prometheus:
+  ingress:
+    enabled: true
+    ingressClassName: ${ingress_class_name}
+    annotations:
+      nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+      nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
+      cert-manager.io/cluster-issuer: ${cluster_issuer_name}
+    hosts:
+      - "prometheus.${hosted_zone_name}"
+    tls:
+      - secretName: prometheus-public-endpoint
+        hosts:
+        - prometheus.${hosted_zone_name}

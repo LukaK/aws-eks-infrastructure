@@ -113,6 +113,12 @@ variable "hosted_zone_id" {
   description = "Route 53 hosted zone id"
 }
 
+variable "prometheus_chart_version" {
+  type        = string
+  description = "Helm chart version for prometheus"
+  default     = "70.7.0"
+}
+
 
 variable "tags" {
   type    = map(string)
