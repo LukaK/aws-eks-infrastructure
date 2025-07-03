@@ -270,6 +270,7 @@ List of add-ons:
 - [cert manager](#cert-manager)
 - [nginx ingress controller](#nginx)
 - [ArgoCD](#argocd)
+- [monitoring](#monitoring)
 
 #### Pod identity
 
@@ -562,6 +563,42 @@ To see default chart values that can be overridden, use the command below.
 ```bash
 helm show values argo/argo-cd --version VERSION
 ```
+
+
+#### Monitoring
+
+Prometheus and grafana are deployed as part of monitoring stack.
+They are part of `LGTM` monitoring stack dedicated for managing metrics data and UI respectively.
+
+Both prometheus and grafana are exposed over public [nginx ingress](#nginx) and traffic is secured with [cert-manager](#cert-manager).
+This is an example and should not be deployed into production.
+They should be deployed in private network or additional configuration is needed since prometheus is exposed and grafana has default credentials.
+
+Prometheus is available on `https://prometheus.api.DOMAIN` and grafana on `https://grafana.api.DOMAIN`.
+To login into grafana use `admin/prom-operator` credentials.
+Grafana has configured prometheus in data sources and some of the dashboards are pre installed.
+
+Both prometheus and grafana are installed with one helm chart.
+To upgrade the version of the chart, use the command below to find out the new version and update the corresponding module parametar.
+```bash
+helm repo add nginx https://prometheus-community.github.io/helm-charts
+helm repo update
+helm search repo prometheus/kube-prometheus-stack
+```
+
+To see default chart values that can be overridden, use the command below.
+```bash
+helm show values prometheus/kube-prometheus-stack --version VERSION
+```
+
+
+<p align="center">
+    <img title="Grafana Dashboard" alt="Grafana Dashboard" width="100%" src="./assets/grafana-dashboard.png">
+</p>
+<p align="center">
+    <em>Fig 6. Grafana Dashboard</em>
+</p>
+
 
 ## Cleanup
 If you deployed examples individually, make sure you delete the resources to release all of the aws resources.
